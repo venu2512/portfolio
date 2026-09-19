@@ -91,7 +91,7 @@ async function makeOg(photoPath) {
       .png()
       .toBuffer();
     const masked = await sharp(photo)
-      .composite([{ input: mask, blend: "destination-in" }])
+      .composite([{ input: mask, blend: "dest-in" }])
       .png()
       .toBuffer();
     layers.push({ input: masked, top: 135, left: 100 });
