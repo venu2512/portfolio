@@ -1,0 +1,41 @@
+{
+  "name": "venugopal-3d-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Neural Corridor — a scroll-driven 3D portfolio for Venugopal V",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "npx --yes serve out -l 3000",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "analyze": "ANALYZE=true next build"
+  },
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@fontsource/space-grotesk": "5.3.0",
+    "@react-three/drei": "10.7.8",
+    "@react-three/fiber": "9.7.0",
+    "@react-three/postprocessing": "3.1.1",
+    "maath": "0.10.8",
+    "next": "16.3.5",
+    "postprocessing": "6.39.5",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "0.186.0",
+    "zustand": "5.0.15"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.3.3",
+    "@next/bundle-analyzer": "16.3.5",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "24.10.9",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "0.186.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.5",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3"
+  }
+}
