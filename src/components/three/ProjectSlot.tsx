@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
-import { useSiteStore } from "../../lib/store";
 import useViewRegistration from "../../lib/useViewRegistration";
 
 export type ProjectId = "certchain" | "legal-ai" | "cloud-nova";
@@ -51,11 +50,7 @@ export default function ProjectSlot({
   const { visible } = useInViewMargin(ref);
   // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
   const id = `project-${pid}`;
-  const webgl = useSiteStore((s) => s.webgl);
-  const simpleView = useSiteStore((s) => s.simpleView);
   useViewRegistration(id, ref, visible);
-
-  const canvasLive = webgl === "ok" && !simpleView;
 
   return (
     <div
@@ -63,7 +58,6 @@ export default function ProjectSlot({
       data-view={`project-${pid}`}
       className="view-slot card-soft overflow-hidden cursor-pointer"
       style={{ aspectRatio: "360 / 280" }}
-      data-3d={canvasLive ? "on" : "off"}
       role="button"
       tabIndex={0}
       aria-label={`Open ${pid} details`}
@@ -75,7 +69,7 @@ export default function ProjectSlot({
         }
       }}
     >
-      {!canvasLive && <div className="view-fallback">{FALLBACKS[pid]}</div>}
+      <div className="view-fallback">{FALLBACKS[pid]}</div>
     </div>
   );
 }

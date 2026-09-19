@@ -45,13 +45,29 @@ function ViewBody({ children, camPos }: { children: React.ReactNode; camPos: [nu
   );
 }
 
-/** Finds the DOM placeholder for a view (mounted before the canvas reads it). */
+/**
+ * Finds the DOM placeholder for a view (mounted before the canvas reads it)
+ * and owns its `data-3d` attribute: "on" while this view is actually mounted
+ * (hiding the DOM fallback via CSS), "off" on unmount. Slots never manage the
+ * attribute themselves — under tier capping a visible slot may have no live
+ * view, and its fallback must stay showing.
+ */
 function useSlotElement(selector: string): HTMLElement | null {
   const [el, setEl] = useState<HTMLElement | null>(null);
   useEffect(() => {
     // Defer a frame so all placeholders are mounted before the canvas reads them.
-    const raf = requestAnimationFrame(() => setEl(document.querySelector<HTMLElement>(selector)));
-    return () => cancelAnimationFrame(raf);
+    const raf = requestAnimationFrame(() => {
+      const found = document.querySelector<HTMLElement>(selector);
+      if (found) found.setAttribute("data-3d", "on");
+      setEl(found);
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      setEl((current) => {
+        current?.setAttribute("data-3d", "off");
+        return current;
+      });
+    };
   }, [selector]);
   return el;
 }

@@ -28,7 +28,10 @@ function ProjectDialog({
 
   return (
     <dialog ref={ref} className="project-dialog" aria-label={`${project.name} details`}
-      onClose={onClose}
+      onClose={() => {
+        // Esc/`close()` path also returns focus (native close bypasses onClose prop).
+        onClose();
+      }}
       onClick={(e) => {
         if (e.target === ref.current) onClose(); // backdrop click
       }}
@@ -69,6 +72,26 @@ function ProjectDialog({
 export default function Projects() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const wrapRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const lastOpener = useRef<HTMLElement | null>(null);
+
+  // Focus returns to the opener on close; page scroll locks while open (§9).
+  const openProject = (i: number) => {
+    lastOpener.current = document.activeElement as HTMLElement | null;
+    setOpenIdx(i);
+  };
+  const closeProject = () => {
+    setOpenIdx(null);
+    lastOpener.current?.focus();
+  };
+
+  useEffect(() => {
+    if (openIdx === null) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [openIdx]);
 
   const tilt = (i: number) => (e: React.PointerEvent<HTMLDivElement>) => {
     const el = wrapRefs.current[i];
@@ -107,7 +130,7 @@ export default function Projects() {
               onPointerLeave={untilt(i)}
             >
               <div className="grid md:grid-cols-2 gap-6 items-center">
-                <ProjectSlot pid={p.id as ProjectId} onOpen={() => setOpenIdx(i)} />
+                <ProjectSlot pid={p.id as ProjectId} onOpen={() => openProject(i)} />
                 <div>
                   <h3 className="text-2xl font-extrabold">{p.name}</h3>
                   <p className="text-sm mt-0.5" style={{ color: "var(--muted)" }}>{p.subtitle}</p>
@@ -124,12 +147,12 @@ export default function Projects() {
                       <span key={s} className="chip chip-white">{s}</span>
                     ))}
                   </div>
-                  <button type="button" className="btn btn-secondary mt-6" onClick={() => setOpenIdx(i)}>
+                  <button type="button" className="btn btn-secondary mt-6" onClick={() => openProject(i)}>
                     View details
                   </button>
                 </div>
               </div>
-              <ProjectDialog project={p} open={openIdx === i} onClose={() => setOpenIdx(null)} />
+              <ProjectDialog project={p} open={openIdx === i} onClose={closeProject} />
             </div>
           </Reveal>
         ))}

@@ -2,24 +2,21 @@
 
 import { useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
-import { useSiteStore } from "../../lib/store";
 import Photo from "../Photo";
 import useViewRegistration from "../../lib/useViewRegistration";
 
 /**
- * Hero 3D slot. DOM fallback (framed photo + CSS floating chips) is always
- * rendered; the 3D medallion replaces it visually when the canvas is live.
+ * Hero 3D slot. The DOM fallback (framed photo + CSS floating chips) is
+ * always rendered underneath; CanvasRoot sets data-3d="on" when the 3D view
+ * actually mounts (CSS fades the fallback out). On low tier the fallback
+ * stays visible when no view slot is available.
  */
 export default function HeroSlot() {
   const ref = useRef<HTMLDivElement>(null);
   const { visible } = useInViewMargin(ref);
   // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
   const id = "hero";
-  const webgl = useSiteStore((s) => s.webgl);
-  const simpleView = useSiteStore((s) => s.simpleView);
   useViewRegistration(id, ref, visible);
-
-  const canvasLive = webgl === "ok" && !simpleView;
 
   return (
     <div
@@ -27,10 +24,8 @@ export default function HeroSlot() {
       data-view="hero"
       className="view-slot mx-auto"
       style={{ aspectRatio: "1 / 1", maxWidth: 520 }}
-      data-3d={canvasLive ? "on" : "off"}
     >
-      {!canvasLive && (
-        <div className="view-fallback">
+      <div className="view-fallback">
           <div className="relative w-full max-w-[420px]">
             <div className="absolute inset-0 -z-10 rounded-[36px]" style={{ background: "radial-gradient(closest-side, rgba(255,106,19,0.25), transparent)" }} />
             <Photo priority rounded="rounded-[32px]" className="w-full" monogramSize="text-7xl" />
@@ -48,7 +43,6 @@ export default function HeroSlot() {
             </div>
           </div>
         </div>
-      )}
       {/* When live, View renders into this div from the shared canvas. */}
     </div>
   );

@@ -2,21 +2,20 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInViewMargin } from "../../lib/hooks";
-import { useSiteStore } from "../../lib/store";
 import useViewRegistration from "../../lib/useViewRegistration";
 import { setActiveExperience } from "../../lib/activeExp";
 
 /**
  * Experience stage slot. Active index derives from whichever card sits in the
- * middle band of the viewport; the 3D stage swaps its object in sync.
+ * middle band of the viewport (§8.2 IO with the -45% band); the 3D stage swaps
+ * its object in sync. The SVG fallback per role is always rendered beneath;
+ * CanvasRoot toggles data-3d when the 3D view actually mounts.
  */
 export default function ExperienceSlot() {
   const ref = useRef<HTMLDivElement>(null);
   const { visible } = useInViewMargin(ref);
   // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
   const id = "experience";
-  const webgl = useSiteStore((s) => s.webgl);
-  const simpleView = useSiteStore((s) => s.simpleView);
   const [active, setActive] = useState(0);
   useViewRegistration(id, ref, visible);
 
@@ -39,8 +38,6 @@ export default function ExperienceSlot() {
     document.querySelectorAll("[data-exp]").forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
-
-  const canvasLive = webgl === "ok" && !simpleView;
 
   const Fallbacks = [
     <svg key="k" viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
@@ -81,9 +78,8 @@ export default function ExperienceSlot() {
       data-view="experience"
       className="view-slot card overflow-hidden"
       style={{ aspectRatio: "4 / 3" }}
-      data-3d={canvasLive ? "on" : "off"}
     >
-      {!canvasLive && <div className="view-fallback">{Fallbacks[active]}</div>}
+      <div className="view-fallback">{Fallbacks[active]}</div>
     </div>
   );
 }
