@@ -1,6 +1,6 @@
 "use client";
 
-import { experience } from "../content/data";
+import { experience, experiencePeriod } from "../content/data";
 import { useSiteStore } from "../lib/store";
 import Reveal from "./Reveal";
 import ExperienceSlot from "./three/ExperienceSlot";
@@ -27,7 +27,9 @@ export default function Experience() {
               >
                 <div className="flex items-baseline justify-between gap-3 flex-wrap">
                   <h3 className="text-xl font-bold">{job.org}</h3>
-                  {job.period && <span className="chip chip-primary">{job.period}</span>}
+                  {experiencePeriod(job) && (
+                    <span className="chip chip-primary">{experiencePeriod(job)}</span>
+                  )}
                 </div>
                 <p className="mt-1 font-medium" style={{ color: "var(--muted)" }}>
                   {job.title}

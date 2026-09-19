@@ -6,9 +6,15 @@ export const profile = {
   headline: "I build multi-agent AI systems.",
   tagline:
     "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications.",
+  // Owner-provided wording (§3.1). Confirm before ship.
   summary:
-    "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications. Currently contributing to a production multi-agent digital workforce platform, with experience spanning AI agent implementation, LLM fine-tuning, and decentralized verification systems. Strong foundation in Python, data-driven problem-solving, and modern development tools. Actively seeking internships in Data Science, AI, and Blockchain.",
-  openTo: "Internships in Data Science, AI, and Blockchain",
+    "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications. Recently completed an internship contributing to a production multi-agent digital workforce platform, with experience spanning AI agent implementation, LLM fine-tuning, and decentralized verification systems. Strong foundation in Python, data-driven problem-solving, and modern development tools. Looking for full-time roles and internships in AI, ML, Data Analytics, and Full Stack Development.",
+  // Long form: CTA banner subtext, meta description, JSON-LD description.
+  openTo:
+    "Full-time roles and internships in AI, ML, Data Analytics, and Full Stack Development",
+  // Short form: hero eyebrow pill, announcement bar.
+  openToShort: "Open to full-time roles and internships",
+  // OWNER: confirm
   location: "Madurai, Tamil Nadu, India",
   email: "Venu25122005@gmail.com",
   phone: "+91-7010422347",
@@ -21,7 +27,8 @@ export const profile = {
     { name: "English", level: "Professional" },
     { name: "Telugu", level: "Conversational" },
   ],
-  heroChips: ["Python", "Multi-Agent Systems", "QLoRA", "Ethereum", "React.js"],
+  // All five chips exist in the skills data below (§3.1).
+  heroChips: ["Python", "Multi-Agent Systems", "QLoRA", "React.js", "Power BI"],
   photo: {
     src: "/profile/profile.jpg", // required for best result
     cutout: "/profile/profile-cutout.png", // optional transparent PNG
@@ -36,8 +43,11 @@ export const experience = [
     id: "kreupai",
     org: "KreupAI Technologies LLC",
     title: "AI/ML Engineer Intern",
-    period: "May 2026 – Present",
-    current: true,
+    startDate: "May 2026",
+    // OWNER: fill the real end date when decided. Until then the UI renders
+    // "May 2026 – Completed" (never "Present"/"Currently").
+    endDate: null as string | null,
+    current: false,
     bullets: [
       "Contribute across multiple repositories within KreupAI's AISA multi-agent digital workforce platform, spanning agent logic, backend pipelines, and integration testing.",
       "Implemented and integrated multiple AI agents, including the AI Legal Contract Analyst, building ContractParserTool, ClauseExtractorTool, ContractRiskScorerTool, and ObligationTrackerTool for automated contract parsing, clause extraction, risk scoring, and obligation tracking.",
@@ -56,7 +66,9 @@ export const experience = [
     id: "quadedutor",
     org: "QuadEdutor Pvt. Ltd.",
     title: "Data Science Intern",
-    period: null, // not on resume: do NOT render a date
+    startDate: null as string | null,
+    endDate: null as string | null,
+    current: false,
     bullets: [
       "Cleaned and preprocessed real-world datasets, resolving quality issues ahead of downstream analysis.",
       "Ran exploratory data analysis and built visualizations to surface key trends for stakeholders.",
@@ -67,7 +79,9 @@ export const experience = [
     id: "nitroware",
     org: "Nitroware Technologies",
     title: "AI & ML Intern",
-    period: null,
+    startDate: null as string | null,
+    endDate: null as string | null,
+    current: false,
     bullets: [
       "Designed and trained ML models for real-world applications, iterating on architecture based on performance results.",
       "Improved model performance through systematic tuning and optimization.",
@@ -75,26 +89,20 @@ export const experience = [
   },
 ];
 
+/** "May 2026 – Completed" when endDate is null; never "Present". */
+export function experiencePeriod(job: (typeof experience)[number]): string {
+  if (job.startDate && job.endDate) return `${job.startDate} – ${job.endDate}`;
+  if (job.startDate) return `${job.startDate} – Completed`;
+  return "";
+}
+
 export const projects = [
-  {
-    id: "certchain",
-    name: "CertChain",
-    subtitle: "Blockchain Certificate Verification System",
-    stack: ["Ethereum (Sepolia)", "Smart Contracts", "Web3.js", "MetaMask", "QR Verification"],
-    repoUrl: null as string | null, // user fills; render link only if non-null
-    bullets: [
-      "Architected a decentralized certificate verification system on Ethereum (Sepolia), addressing fake-credential fraud in academic and professional settings.",
-      "Designed and deployed tamper-proof smart contracts to guarantee immutable certificate records.",
-      "Built QR-based verification for instant, public-facing validation of certificate authenticity.",
-      "Developed secure backend APIs for certificate issuance and authentication, with an Admin Portal for institutions and a public User Portal.",
-    ],
-  },
   {
     id: "legal-ai",
     name: "Legal AI Chatbot",
     subtitle: "Domain-specific legal assistant",
     stack: ["Gemma", "QLoRA", "LLM Fine-Tuning", "Python"],
-    repoUrl: null as string | null,
+    repoUrl: null as string | null, // OWNER: add GitHub URL
     bullets: [
       "Built a domain-specific legal chatbot by fine-tuning an LLM (Gemma) using QLoRA for efficient, low-resource deployment.",
       "Implemented contextual understanding to deliver accurate, relevant responses to legal queries.",
@@ -105,16 +113,28 @@ export const projects = [
     name: "Cloud Nova",
     subtitle: "Full Stack Web Application",
     stack: ["MongoDB", "Express.js", "React.js", "Node.js", "Vercel", "Render"],
-    repoUrl: null as string | null,
+    repoUrl: null as string | null, // OWNER: add GitHub URL
     bullets: [
       "Built and deployed a scalable MERN stack application with a modern UI, REST APIs, and MongoDB-backed data handling.",
       "Shipped frontend to Vercel and backend to Render, establishing a production-style deployment pipeline.",
     ],
   },
+  {
+    id: "certchain",
+    name: "CertChain",
+    subtitle: "Blockchain Certificate Verification System",
+    stack: ["Ethereum (Sepolia)", "Smart Contracts", "Web3.js", "MetaMask", "QR Verification"],
+    repoUrl: null as string | null, // OWNER: add GitHub URL
+    bullets: [
+      "Architected a decentralized certificate verification system on Ethereum (Sepolia), addressing fake-credential fraud in academic and professional settings.",
+      "Designed and deployed tamper-proof smart contracts to guarantee immutable certificate records.",
+      "Built QR-based verification for instant, public-facing validation of certificate authenticity.",
+      "Developed secure backend APIs for certificate issuance and authentication, with an Admin Portal for institutions and a public User Portal.",
+    ],
+  },
 ];
 
 export const skills = [
-  { id: "lang", label: "Languages", color: "primary", items: ["Python", "SQL", "Java"] },
   {
     id: "ai",
     label: "AI / Machine Learning",
@@ -130,13 +150,14 @@ export const skills = [
       "Prompt Engineering",
     ],
   },
-  { id: "viz", label: "Visualization", color: "blush", items: ["Power BI", "Matplotlib", "Seaborn", "Plotly"] },
+  { id: "lang", label: "Languages", color: "primary", items: ["Python", "SQL", "Java"] },
   {
     id: "web",
     label: "Web Development",
     color: "sky",
-    items: ["HTML", "CSS","java script", "MongoDB", "Angular.js", "React.js", "Node.js", "REST APIs"],
+    items: ["HTML", "CSS", "JavaScript", "MongoDB", "Angular.js", "React.js", "Node.js", "REST APIs"],
   },
+  { id: "viz", label: "Visualization", color: "blush", items: ["Power BI", "Matplotlib", "Seaborn", "Plotly"] },
   {
     id: "vcs",
     label: "Version Control",
@@ -181,19 +202,19 @@ export const education = [
   },
 ];
 
-// FAQ: answers derived only from the data above (no new claims).
+// FAQ (§3.2): answers use only resume facts or owner statements.
 export const faq = [
   {
     q: "What kind of roles are you looking for?",
-    a: "Internships in Data Science, AI, and Blockchain.",
+    a: "I am looking for a job in the roles of AI Engineer, ML Engineer, Data Analyst, and Full Stack Developer.",
   },
   {
     q: "What are you working on right now?",
-    a: "As an AI/ML Engineer Intern at KreupAI Technologies LLC, I contribute to the AISA multi-agent digital workforce platform: agent logic, backend pipelines, and integration testing, including the AI Legal Contract Analyst and modules for the DaftarAccounting platform.",
+    a: "I recently completed my internship at KreupAI Technologies LLC, where I worked as an AI/ML Engineer Intern on the AISA multi-agent digital workforce platform. I'm not working anywhere right now, and I'm looking for my next opportunity.",
   },
   {
     q: "What is your technical stack?",
-    a: "Python, SQL, and Java; Pandas, NumPy, Scikit-learn, TensorFlow, and OpenCV; the MERN stack; Ethereum, smart contracts, and Web3.js; plus Power BI, Streamlit, Git, and Apache Kafka.",
+    a: "I work mainly in Python, SQL, and Java. For AI and machine learning, I use Pandas, NumPy, Scikit-learn, TensorFlow, and OpenCV, along with LLM fine-tuning (QLoRA), multi-agent systems, and prompt engineering. On the web side, I build with HTML, CSS, REST APIs, and the MERN stack (MongoDB, Express.js, React.js, Node.js). I visualize data with Power BI, Matplotlib, Seaborn, and Plotly, and I work with Git, GitHub, VS Code, Streamlit, and Apache Kafka.",
   },
   {
     q: "Do you have experience fine-tuning LLMs?",
@@ -213,7 +234,7 @@ export const faq = [
   },
 ];
 
-// Derived stats — computed, never hard-coded.
+// Derived stats — computed, never hard-coded (§3.3).
 export function deriveStats(): Array<{ value: number | string; label: string }> {
   return [
     { value: experience.length, label: "Internships" },

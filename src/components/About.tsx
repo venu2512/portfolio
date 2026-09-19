@@ -2,7 +2,7 @@ import { profile } from "../content/data";
 import Photo from "./Photo";
 import Reveal from "./Reveal";
 
-const FOCUS = ["Multi-Agent Systems", "LLM Fine-Tuning", "Blockchain", "Data Science"];
+const FOCUS = ["Multi-Agent Systems", "LLM Fine-Tuning", "Data Analytics", "Full Stack"];
 
 export default function About() {
   return (
@@ -28,16 +28,14 @@ export default function About() {
           </div>
         </Reveal>
 
-        {/* Currently */}
+        {/* Status (open to work — no "Currently"/live wording) */}
         <Reveal delay={120} className="md:col-span-2">
           <div className="card p-7 h-full" style={{ background: "var(--primary-soft)" }}>
-            <div className="flex items-center gap-2">
-              <span className="dot-live" aria-hidden="true" />
-              <span className="mono-label">Currently</span>
-            </div>
-            <p className="mt-3 font-bold text-lg">AI/ML Engineer Intern at KreupAI Technologies LLC</p>
+            <p className="mono-label">Status</p>
+            <p className="mt-3 font-bold text-lg">{profile.openToShort}</p>
             <p className="text-sm mt-1" style={{ color: "var(--muted)" }}>
-              May 2026 – Present · AISA multi-agent digital workforce platform
+              Recently completed the AI/ML Engineer internship at KreupAI Technologies LLC ·
+              AISA multi-agent digital workforce platform
             </p>
           </div>
         </Reveal>
