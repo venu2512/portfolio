@@ -10,12 +10,13 @@ import { profile } from "../content/data";
 import JsonLd from "../components/JsonLd";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://venugopal.dev";
+// §10: openTo + summary, ~155 chars, no invented claims.
 const description =
-  "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications — open to internships in Data Science, AI, and Blockchain.";
+  "AI & Data Science student building multi-agent AI systems, ML solutions, and blockchain apps. Looking for full-time roles and internships in AI, ML, Data Analytics, and Full Stack.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Venugopal V | AI/ML Engineer · Multi-Agent Systems · Data Science · Blockchain",
+  title: "Venugopal V | AI/ML Engineer · Data Science · Full Stack · Multi-Agent Systems",
   description,
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
@@ -23,13 +24,13 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: profile.name,
-    title: "Venugopal V | AI/ML Engineer · Multi-Agent Systems · Data Science · Blockchain",
+    title: "Venugopal V | AI/ML Engineer · Data Science · Full Stack · Multi-Agent Systems",
     description,
     images: [{ url: "/og.png", width: 1200, height: 630, alt: `${profile.name} — ${profile.role}` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Venugopal V | AI/ML Engineer · Multi-Agent Systems · Data Science · Blockchain",
+    title: "Venugopal V | AI/ML Engineer · Data Science · Full Stack · Multi-Agent Systems",
     description,
     images: ["/og.png"],
   },

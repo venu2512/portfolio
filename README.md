@@ -1,10 +1,13 @@
-# The Neural Corridor — Venugopal V's 3D Portfolio
+# Venugopal V — 3D Portfolio
 
-A production-ready, static-export 3D portfolio. The visitor flies a camera along a glowing rail
-through nine stations — each one a career milestone rendered in procedural Three.js geometry.
-All resume content lives in semantic, server-rendered HTML; the 3D world is progressive
-enhancement that fades in after first paint, and falls back to a polished 2D "simple view"
-whenever WebGL is missing, broken, or declined.
+A clean, light, product-style portfolio inspired by the clarity of metamask.io (none of its
+assets): oversized typography, pill buttons, pastel bento cards, one bold orange accent — with
+elegant procedural 3D moments (a cursor-following profile medallion, an experience stage, a
+draggable keycap cloud) rendered through drei `<View>`s into DOM placeholders.
+
+All resume content lives in semantic, server-rendered HTML; the 3D layer is progressive
+enhancement that loads after first paint and falls back to a polished 2D "simple view"
+whenever WebGL is missing, broken, declined, or capped by the performance tier.
 
 ## Quickstart
 
@@ -15,14 +18,16 @@ npm run dev        # http://localhost:3000
 
 | Script | What it does |
 |---|---|
-| `npm run dev` | Dev server |
-| `npm run build` | Static export to `out/` (also type-checks) |
-| `npm run start` | Serves `out/` statically (production preview) |
-| `npm run lint` | ESLint (Next core-web-vitals + TS) |
+| `npm run dev` | Dev server (also regenerates photo variants + OG via `predev`) |
+| `npm run build` | Static export to `out/` (photo pipeline + resume gate run first) |
+| `npm run start` | Serves `out/` statically (`npx serve out`) |
+| `npm run lint` | ESLint (Next core-web-vitals + TS, flat config) |
 | `npm run typecheck` | `tsc --noEmit` |
+| `npm run photo` | Regenerate profile image variants + `og.png` |
+| `npm run check-resume` | Verify the resume PDF gate (runs inside `prebuild`) |
 | `npm run analyze` | Bundle analysis (`ANALYZE=true next build`) |
 
-Everything ships: `npm run lint`, `npm run typecheck`, and `npm run build` all pass with zero
+Everything ships: `npm run lint`, `npm run typecheck`, and `npm run build` pass with zero
 errors. Deployment output is a plain `out/` folder — no server required.
 
 ## Editing your content
@@ -32,39 +37,55 @@ it. There are no invented facts; if a field is `null`, nothing renders.
 
 - **Add a project:** append to `projects` with a unique `id`, `name`, `subtitle`, `stack`,
   `bullets`, and `repoUrl` (leave `null` to hide the repo link — all three are `null` now).
-- **Add skills:** append to the right `skills` category; the 3D constellation adds a node.
+- **Add skills:** append to the right `skills` category; the keycap cloud adds a key.
 - **Show your phone:** set `showPhone: true`. The built site contains **no phone number** while
-  it is `false` (verified in CI-style checks below).
-- **Replace the resume PDF:** `public/Venugopal_V_Resume.pdf` is currently a generated
-  placeholder (from `scripts/make-resume.mjs`). Drop in your real PDF with the same filename.
-- **Dates for QuadEdutor / Nitroware:** add a `period` string when you have them; sections
-  render no date until then. There is deliberately **no Achievements section**.
-
-Regenerate the OG image any time with `node scripts/make-og.mjs` (edit the script to restyle it).
+  it is `false` (the contact section has no phone JSX at all).
+- **Replace the resume PDF:** `public/Venugopal_V_Resume.pdf` is currently a placeholder.
+  **Production builds fail until you drop in the real PDF** (same filename) — the gate is
+  `scripts/check-resume.mjs` (fails on missing / < 20 KB / placeholder-marker files; warns in dev).
+- **Profile photo:** drop `public/profile/profile.jpg` (min 1200px short side, face in the
+  upper half, plain background) and optionally `public/profile/profile-cutout.png`
+  (transparent). `scripts/optimize-photo.mjs` emits AVIF/WebP/JPG at 480/960/1440 (each
+  ≤ 200 KB, EXIF stripped), a blur placeholder, and the 1200×630 `og.png` (photo + name +
+  role on orange; monogram variant when no photo). Without a photo the site uses the "VV"
+  monogram badge everywhere.
+- **KreupAI end date:** set `endDate` on the KreupAI entry; until then the UI renders
+  "May 2026 – Completed" (never "Present").
+- There is deliberately **no Achievements section** and no fabricated metrics.
 
 ## Architecture
 
 ```
-Layer 0  <Canvas>            fixed, z-0 — the 3D world (lazy, fades in after idle)
-Layer 1  <main> sections     9 semantic sections (100svh each), the scroll driver
-Layer 2  Nav / Drawer /      fixed UI: dot-rail, mobile top bar, DetailDrawer,
-         toggles             simple-view + quality-tier toggles
+Layer 0  <Canvas>            fixed overlay (z 30, pointer-events none) rendering drei <View>s
+Layer 1  DOM page            semantic sections; normal scrolling; 3D slots are aspect-ratio
+                             placeholders with always-rendered fallbacks
+Layer 2  Nav / dialog /      sticky pill navbar, announcement bar, toast, cursor,
+         toggles             theme + 3D toggles (z ≥ 45, above the canvas)
 ```
 
-- **Scroll → camera:** native scroll position feeds a damped progress value (maath `damp3`)
-  along two Catmull-Rom curves (position + look-at). Waypoint *index* parametrization means
-  each 100svh section maps 1:1 to a station. Scroll-snap is `proximity`, never mandatory.
-- **Tiers:** one-time hardware probe (`src/lib/quality.ts`) → high/medium/low → dpr, particle
-  count, antialias, Bloom. drei `<PerformanceMonitor>` steps the tier down/up at runtime
-  (never above detected). Manual override in the nav persists to `localStorage`.
-- **Fallbacks:** no WebGL / context lost / scene error / Save-Data + reduced-motion → simple
-  view (CSS constellation background, always-visible cards, zero 3D code loaded). Toggle lives
-  in the nav and persists.
-- **Accessibility:** skip link, one `<h1>`, landmark nav, focus-trapped drawer
-  (`aria-modal`), keyboard section nav (`↑/↓/PageUp/PageDown/Home/End`), 2px cyan focus rings,
-  reduced-motion honored everywhere, canvas `aria-hidden`, all content reachable without JS.
-- **SEO:** every word is in the static HTML (verified), Person JSON-LD, OG/Twitter cards with
-  a real 1200×630 `og.png`, `sitemap.xml`, `robots.txt`, canonical via `NEXT_PUBLIC_SITE_URL`.
+- **Shared canvas, many views:** one lazy-loaded `<Canvas>` (`ssr:false`, mounted after
+  idle) renders `<View.Port />`; each `<View track={placeholder}>` brings its own camera and
+  the `<Studio/>` light rig. Slots register stable ids + visibility (200px IO margin) in a
+  zustand store; only visible views mount, capped by tier (`low` = hero only, `medium` = 2).
+- **Pointer events** reach the 3D objects through `eventSource=#app-root` (the page wrapper),
+  so scrolling and text selection keep working; placeholders use `touch-action: pan-y`.
+- **Tiers:** one-time hardware probe (`src/lib/quality.ts`) → high/medium/low → dpr, shadows
+  (ContactShadows vs BlobShadow), materials (Physical vs Standard), max active views. drei
+  `<PerformanceMonitor>` steps down on decline; after 3 flip-flops the session locks to the
+  lower tier (adaptation pauses rather than disabling).
+- **Fallbacks:** no WebGL / context lost (2 s restore grace) / scene error / Save-Data →
+  simple view (`data-mode="simple"`): placeholders show their DOM fallbacks (framed photo with
+  floating chips, SVG illustrations per role, chip grid with the same filters, CSS shapes).
+  The toggle lives in the footer and persists.
+- **Motion:** Lenis (fine pointer only, reduced-motion safe) with `scrollTo(el, offset:-80)`;
+  reveal-on-scroll gated behind `html.enhanced` (no-JS shows everything); magnetic buttons,
+  card tilt, cursor dot, count-ups — all disabled under reduced motion or coarse pointers.
+- **Accessibility:** skip link, single `<h1>`, landmark nav, focus-trapped mobile sheet,
+  native `<dialog>` with focus return, native `<details>` FAQ, canvas `aria-hidden`, 2px
+  orange focus rings, all content reachable without JS.
+- **SEO:** every word is in the static HTML (verified), Person JSON-LD (no phone), OG/Twitter
+  cards with the generated `og.png`, `sitemap.xml`, `robots.txt`, canonical via
+  `NEXT_PUBLIC_SITE_URL`.
 
 ## Deployment
 
@@ -93,14 +114,23 @@ GH_PAGES=true GH_PAGES_REPO=<repo-name> NEXT_PUBLIC_SITE_URL=https://<user>.gith
 
 `next.config.mjs` applies `basePath`/`assetPrefix` automatically when `GH_PAGES=true`.
 
+## Repo settings (set in the GitHub UI)
+
+- **Description:** "Portfolio of Venugopal V — AI/ML engineer. Next.js + Three.js, light bento
+  design, cursor-following 3D medallion."
+- **Suggested topics:** `nextjs`, `threejs`, `react-three-fiber`, `portfolio`, `typescript`
+
 ## Deployment checklist
 
 Run after every change; the first items are automated:
 
 - [x] `npm run lint && npm run typecheck && npm run build` pass; `out/` generated
-- [x] Built HTML contains all resume text (verified: name, 3 employers, 3 projects,
-      all 7 skill categories, both schools, languages)
-- [x] `Venugopal_V_Resume.pdf` present in `/public` and linked *(placeholder — replace it!)*
+- [x] Built HTML contains all resume text (name, 3 employers, 3 projects, all 7 skill
+      categories, both schools, full FAQ text)
+- [x] No "Present"/"Currently"/live-beacon wording for KreupAI anywhere
+- [ ] `Venugopal_V_Resume.pdf` real PDF committed *(build fails until then — placeholder present)*
+- [ ] `public/profile/profile.jpg` (+ optional cutout) added; photo pipeline verified in all
+      three modes *(currently monogram mode)*
 - [x] Phone number absent from built output while `showPhone: false`
 - [x] Repo links render only for non-null `repoUrl` (currently none)
 - [x] sitemap.xml and robots.txt generated
@@ -116,10 +146,14 @@ Run after every change; the first items are automated:
 
 ## Items that need your input
 
-1. **`repoUrl` for the three projects** in `src/content/data.ts` (GitHub links) — links appear
-   in the DetailDrawer the moment you fill them in.
-2. **Final domain** → set `NEXT_PUBLIC_SITE_URL` and update `metadataBase` fallback.
-3. **`showPhone`** — currently `false`; flip in `data.ts` to expose your number.
-4. **Real resume PDF** → replace `public/Venugopal_V_Resume.pdf`.
-5. **Search Console** → verify ownership after deploy (a `<meta name="google-site-verification">`
+1. **Real resume PDF** → replace `public/Venugopal_V_Resume.pdf` (production builds fail
+   until you do). Update it for the completed KreupAI internship.
+2. **Profile photo** → `public/profile/profile.jpg` + optional `profile-cutout.png`.
+3. **`repoUrl` for the three projects** in `src/content/data.ts` (each has a
+   `// OWNER: add GitHub URL` marker) — Legal AI Chatbot, Cloud Nova, CertChain.
+4. **KreupAI `endDate`** → set it in `data.ts`; renders "May 2026 – Completed" until then.
+5. **Final domain** → set `NEXT_PUBLIC_SITE_URL` and update `metadataBase` fallback.
+6. **`showPhone`** — currently `false`; flip in `data.ts` to expose your number.
+7. **Location** — `data.ts` says "Madurai, Tamil Nadu, India" (`// OWNER: confirm`).
+8. **Search Console** → verify ownership after deploy (a `<meta name="google-site-verification">`
    can be added to `src/app/layout.tsx` metadata once you have the token).
