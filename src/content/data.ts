@@ -3,7 +3,7 @@ export const profile = {
   shortName: "Venu",
   monogram: "VV",
   role: "AI/ML Engineer Intern",
-  headline: "I build multi-agent AI systems.",
+  headline: "Venugopal V",
   tagline:
     "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications.",
   // Owner-provided wording (§3.1). Confirm before ship.
@@ -46,9 +46,8 @@ export const experience = [
     org: "KreupAI Technologies LLC",
     title: "AI/ML Engineer Intern",
     startDate: "May 2026",
-    // OWNER: fill the real end date when decided. Until then the UI renders
-    // "May 2026 – Completed" (never "Present"/"Currently").
-    endDate: null as string | null,
+    // Real end date from public/Venugopal_V_Resume.pdf ("May 2026 – August 2026").
+    endDate: "August 2026",
     current: false,
     bullets: [
       "Contribute across multiple repositories within KreupAI's AISA multi-agent digital workforce platform, spanning agent logic, backend pipelines, and integration testing.",
@@ -104,7 +103,7 @@ export const projects = [
     name: "Legal AI Chatbot",
     subtitle: "Domain-specific legal assistant",
     stack: ["Gemma", "QLoRA", "LLM Fine-Tuning", "Python"],
-    repoUrl: null as string | null, // OWNER: add GitHub URL
+    repoUrl: "https://github.com/venu2512/lex-chatbot",
     bullets: [
       "Built a domain-specific legal chatbot by fine-tuning an LLM (Gemma) using QLoRA for efficient, low-resource deployment.",
       "Implemented contextual understanding to deliver accurate, relevant responses to legal queries.",
@@ -115,7 +114,7 @@ export const projects = [
     name: "Cloud Nova",
     subtitle: "Full Stack Web Application",
     stack: ["MongoDB", "Express.js", "React.js", "Node.js", "Vercel", "Render"],
-    repoUrl: null as string | null, // OWNER: add GitHub URL
+    repoUrl: "https://github.com/venu2512/cloud-web",
     bullets: [
       "Built and deployed a scalable MERN stack application with a modern UI, REST APIs, and MongoDB-backed data handling.",
       "Shipped frontend to Vercel and backend to Render, establishing a production-style deployment pipeline.",
@@ -126,7 +125,7 @@ export const projects = [
     name: "CertChain",
     subtitle: "Blockchain Certificate Verification System",
     stack: ["Ethereum (Sepolia)", "Smart Contracts", "Web3.js", "MetaMask", "QR Verification"],
-    repoUrl: null as string | null, // OWNER: add GitHub URL
+    repoUrl: "https://github.com/venu2512/certchain",
     bullets: [
       "Architected a decentralized certificate verification system on Ethereum (Sepolia), addressing fake-credential fraud in academic and professional settings.",
       "Designed and deployed tamper-proof smart contracts to guarantee immutable certificate records.",

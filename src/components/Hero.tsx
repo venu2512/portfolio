@@ -7,29 +7,10 @@ import Reveal from "./Reveal";
 import HeroSlot from "./three/HeroSlot";
 
 // Static line split for the mask reveal — measured at build time (no JS measuring).
-// The italic orange accent word mirrors metamask's "Where your *money* lives".
-const ACCENT = "multi-agent";
 const LINES: string[] = (() => {
   const words = profile.headline.split(" ");
   return [words.slice(0, 3).join(" "), words.slice(3).join(" ")].filter(Boolean);
 })();
-
-function accentWords(line: string): React.ReactNode {
-  return line.split(" ").map((w, j) => {
-    const isAccent = w.replace(/[^A-Za-z-]/g, "") === ACCENT;
-    const node = isAccent ? (
-      <em className="accent" key={j}>{w}</em>
-    ) : (
-      <span key={j}>{w}</span>
-    );
-    return (
-      <span key={`w${j}`}>
-        {j > 0 ? " " : ""}
-        {node}
-      </span>
-    );
-  });
-}
 
 export default function Hero() {
   // One reveal trigger drives the line-mask (.in) and the rest of the hero.
@@ -53,7 +34,7 @@ export default function Hero() {
           <h1 className="h1 mt-6">
             {LINES.map((line, i) => (
               <span key={i} className={`line-mask ${heroInView ? "in" : ""}`}>
-                <span>{accentWords(line)}</span>
+                <span>{line}</span>
               </span>
             ))}
           </h1>
