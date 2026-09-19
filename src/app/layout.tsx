@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource/space-grotesk/400.css";
-import "@fontsource/space-grotesk/500.css";
-import "@fontsource/space-grotesk/700.css";
+import "@fontsource/plus-jakarta-sans/400.css";
+import "@fontsource/plus-jakarta-sans/500.css";
+import "@fontsource/plus-jakarta-sans/600.css";
+import "@fontsource/plus-jakarta-sans/700.css";
+import "@fontsource/plus-jakarta-sans/800.css";
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/500.css";
 import "./globals.css";
@@ -10,7 +12,7 @@ import JsonLd from "../components/JsonLd";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://venugopal.dev";
 const description =
-  "AI & Data Science student building multi-agent AI systems, ML solutions, and blockchain apps — open to internships in Data Science, AI, and Blockchain.";
+  "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications — open to internships in Data Science, AI, and Blockchain.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -36,14 +38,27 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05060d",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f5f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e11" },
+  ],
   width: "device-width",
   initialScale: 1,
 };
 
+// Runs before paint: light by default, persisted choice wins.
+const themeScript = `(function(){try{var t=localStorage.getItem("venu-theme");if(t==="dark"||t==="light"){document.documentElement.setAttribute("data-theme",t)}}catch(e){}})();`;
+
+// Adds .enhanced early so reveal states apply without flicker (no-JS never hides content).
+const enhancedScript = `document.documentElement.classList.add("enhanced");`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: enhancedScript }} />
+      </head>
       <body>
         <JsonLd />
         <a href="#hero" className="skip-link">

@@ -7,15 +7,15 @@ export type TierOverride = Tier | "auto";
 export type WebglStatus = "ok" | "unsupported" | "lost";
 
 export interface SiteState {
-  active: number;
-  hoveredId: string | null;
-  selectedId: string | null;
+  theme: "light" | "dark";
+  visibleViews: Set<string>;
+  flashBullet: { expId: string; index: number } | null;
   tierOverride: TierOverride;
-  runtimeTier: Tier; // adjusted by PerformanceMonitor while override is "auto"
-  detectedTier: Tier; // one-time hardware detection, cap for auto adjustments
+  runtimeTier: Tier;
+  detectedTier: Tier;
   reducedMotion: boolean;
-  simpleView: boolean; // user toggle (persisted)
-  forcedSimple: boolean; // computed: no WebGL / context lost / save-data+RM
+  simpleView: boolean;
+  forcedSimple: boolean;
   webgl: WebglStatus;
   set: <T extends keyof SiteState>(key: T, value: SiteState[T]) => void;
 }
@@ -31,21 +31,16 @@ export function stepTier(t: Tier, dir: 1 | -1): Tier {
   return TIER_ORDER[i] ?? t;
 }
 
-export function effectiveTier(
-  override: TierOverride,
-  runtime: Tier,
-  detected: Tier,
-  simple: boolean
-): Tier {
+export function effectiveTier(override: TierOverride, runtime: Tier, detected: Tier, simple: boolean): Tier {
   if (simple) return "low";
   if (override !== "auto") return override;
   return tierValue(runtime) < tierValue(detected) ? runtime : detected;
 }
 
 export const useSiteStore = create<SiteState>((set) => ({
-  active: 0,
-  hoveredId: null,
-  selectedId: null,
+  theme: "light",
+  visibleViews: new Set<string>(),
+  flashBullet: null,
   tierOverride: "auto",
   runtimeTier: "high",
   detectedTier: "high",

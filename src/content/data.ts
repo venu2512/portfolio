@@ -135,7 +135,7 @@ export const skills = [
     id: "web",
     label: "Web Development",
     color: "sky",
-    items: ["HTML", "CSS", "MongoDB", "Express.js", "React.js", "Node.js", "REST APIs"],
+    items: ["HTML", "CSS","java script", "MongoDB", "Angular.js", "React.js", "Node.js", "REST APIs"],
   },
   {
     id: "vcs",

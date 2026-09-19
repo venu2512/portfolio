@@ -28,19 +28,19 @@ export function detectTier(): Tier {
 
 export interface TierTables {
   dpr: [number, number];
-  particles: number;
-  bloom: boolean;
+  shadows: "contact" | "blob";
+  material: "physical" | "standard";
+  maxActiveViews: number; // high = all visible; medium = 2; low = 1 (hero only)
   antialias: boolean;
-  lines: "full" | "hero-only" | "none";
 }
 
 export function tierTables(tier: Tier): TierTables {
   switch (tier) {
     case "high":
-      return { dpr: [1, 2], particles: 4000, bloom: true, antialias: true, lines: "full" };
+      return { dpr: [1, 2], shadows: "contact", material: "physical", maxActiveViews: 99, antialias: true };
     case "medium":
-      return { dpr: [1, 1.5], particles: 1800, bloom: false, antialias: true, lines: "full" };
+      return { dpr: [1, 1.5], shadows: "blob", material: "physical", maxActiveViews: 2, antialias: true };
     case "low":
-      return { dpr: [1, 1], particles: 600, bloom: false, antialias: false, lines: "hero-only" };
+      return { dpr: [1, 1], shadows: "blob", material: "standard", maxActiveViews: 1, antialias: false };
   }
 }
