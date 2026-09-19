@@ -1,5 +1,15 @@
 "use client";
 
+/**
+ * Experience Stage (§8.2): one view, three groups swapped by the active card
+ * (IntersectionObserver on [data-exp] → activeExp bridge). Active group damps
+ * scale→1/y→0; others shrink to 0.001 and hide below 0.01. Material opacity is
+ * never animated. KreupAI: rounded monolith + calm static badge + five
+ * orbiting tool keycaps (hover slows/scales, click flashes the matching
+ * card bullet). QuadEdutor: seven easing bars at fixed artistic heights (no
+ * fake numbers). Nitroware: layered node graph with a 2.5 s emissive pulse.
+ */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -23,6 +33,8 @@ function KreupaiScene() {
   const tools = experience[0]?.tools ?? [];
   const orbit = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  // Calm static badge plate (no pulsing "live/active" beacon — §8.2).
+  const badge = useMemo(() => makeLabelTexture("AISA", { bg: "#FFE3CF", fg: "#16161a" }), []);
 
   useFrame((_, dt) => {
     const g = orbit.current;
@@ -48,9 +60,10 @@ function KreupaiScene() {
         <roundedBoxGeometry args={[1.5, 2.2, 1.1, 4, 0.16]} />
         <meshPhysicalMaterial color={ACCENT} roughness={0.35} clearcoat={0.6} clearcoatRoughness={0.25} />
       </mesh>
-      <mesh position={[0, 1.25, 0]}>
-        <sphereGeometry args={[0.13, 24, 24]} />
-        <meshStandardMaterial color="#FFE29A" emissive="#FFB020" emissiveIntensity={2} />
+      {/* Static badge plate on the monolith — deliberately calm. */}
+      <mesh position={[0, 1.05, 0.58]}>
+        <roundedBoxGeometry args={[0.9, 0.34, 0.06, 2, 0.08]} />
+        <meshStandardMaterial map={badge} roughness={0.4} />
       </mesh>
 
       <group ref={orbit}>
@@ -131,6 +144,8 @@ function QuadScene() {
 }
 
 function NitroScene() {
+  // Layered nodes (4-6-6-3) with lines; a pulse travels layer to layer every
+  // 2.5 s as per-layer emissive waves (§8.2).
   const layers = useMemo(
     () => [
       { y: 1.1, count: 4, color: "#C9B8FF" },
@@ -141,32 +156,28 @@ function NitroScene() {
     []
   );
   const pulse = useRef(0);
-  const mats = useRef<Array<THREE.MeshStandardMaterial | null>>([]);
+  const mats = useRef<Array<{ mat: THREE.MeshStandardMaterial; layer: number }>>([]);
 
   useFrame((_, dt) => {
     pulse.current += dt;
     const wave = ((pulse.current % 2.5) / 2.5) * 4;
-    mats.current.forEach((m, i) => {
-      if (!m) return;
-      const layerIdx = Math.floor(i / 6);
-      const d = Math.abs(wave - layerIdx);
-      m.emissiveIntensity = Math.max(0, 1.4 - d * 1.2);
-    });
+    for (const { mat, layer } of mats.current) {
+      const d = Math.abs(wave - layer);
+      mat.emissiveIntensity = Math.max(0, 1.4 - d * 1.2);
+    }
   });
 
   const meshes: React.ReactNode[] = [];
-  let idx = 0;
   layers.forEach((layer, li) => {
     for (let ci = 0; ci < layer.count; ci++) {
       const angle = (ci / layer.count) * Math.PI * 2 + li * 0.4;
       const r = li === 0 || li === 3 ? 0.55 : 0.95;
-      const i = idx++;
       meshes.push(
         <mesh key={`${li}-${ci}`} position={[Math.cos(angle) * r, layer.y, Math.sin(angle) * r * 0.6]}>
           <sphereGeometry args={[0.16, 20, 20]} />
           <meshStandardMaterial
             ref={(m) => {
-              mats.current[i] = m;
+              if (m) mats.current.push({ mat: m, layer: li });
             }}
             color={layer.color}
             emissive={ACCENT}

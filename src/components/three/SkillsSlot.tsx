@@ -5,7 +5,7 @@ import { useInViewMargin } from "../../lib/hooks";
 import { useSiteStore } from "../../lib/store";
 import useViewRegistration from "../../lib/useViewRegistration";
 import { skills } from "../../content/data";
-import { skillsFilterRef } from "../../three/filterMirror";
+import { setSkillsFilter } from "../../three/filterMirror";
 
 export default function SkillsSlot({ filter }: { filter: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -16,10 +16,10 @@ export default function SkillsSlot({ filter }: { filter: string }) {
   const simpleView = useSiteStore((s) => s.simpleView);
   useViewRegistration(id, ref, visible);
 
-  // Current filter is read by the 3D cloud through a module-scope mirror
+  // Current filter is pushed to the 3D cloud through a module-scope mirror
   // (kept out of render per React Compiler rules).
   useEffect(() => {
-    skillsFilterRef.current = filter;
+    setSkillsFilter(filter);
   }, [filter]);
 
   const canvasLive = webgl === "ok" && !simpleView;

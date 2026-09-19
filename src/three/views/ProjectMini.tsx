@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { damp } from "maath/easing";
+import { makeLabelTexture } from "../labels";
 import type { ReactNode } from "react";
 
 const ORANGE = "#FF6A13";
@@ -140,6 +141,10 @@ function CloudNova() {
     return arr;
   }, []);
 
+  // Label textures for the two orbiters (Vercel / Render, §8.4).
+  const labelVercel = useMemo(() => makeLabelTexture("Vercel", { bg: "#FFE29A", fg: "#16161a" }), []);
+  const labelRender = useMemo(() => makeLabelTexture("Render", { bg: "#FFB8CB", fg: "#16161a" }), []);
+
   useFrame((_, dt) => {
     if (orbiter1.current) orbiter1.current.rotation.y += dt * 0.9;
     if (orbiter2.current) orbiter2.current.rotation.y -= dt * 0.7;
@@ -155,14 +160,14 @@ function CloudNova() {
       ))}
       <group ref={orbiter1}>
         <mesh position={[1.7, 0.5, 0]}>
-          <boxGeometry args={[0.5, 0.3, 0.12]} />
-          <meshStandardMaterial color="#FFE29A" />
+          <boxGeometry args={[0.7, 0.34, 0.12]} />
+          <meshStandardMaterial map={labelVercel} roughness={0.4} />
         </mesh>
       </group>
       <group ref={orbiter2}>
         <mesh position={[-1.7, -0.4, 0]}>
-          <boxGeometry args={[0.5, 0.3, 0.12]} />
-          <meshStandardMaterial color="#FFB8CB" />
+          <boxGeometry args={[0.7, 0.34, 0.12]} />
+          <meshStandardMaterial map={labelRender} roughness={0.4} />
         </mesh>
       </group>
     </FloatTilt>
