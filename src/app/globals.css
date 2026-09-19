@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
-@theme {
+/* Map design tokens into Tailwind's theme (colors + fonts + radius) so
+   utilities like bg-surface / text-ink / font-mono compile. Kept in sync
+   with the :root/[data-theme="dark"] token blocks below. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-lavender: var(--lavender);
+  --color-blush: var(--blush);
+  --color-sky: var(--sky);
+  --color-cream: var(--cream);
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --radius-card: 28px;
 }
 
 /* ---------------- Design tokens (light default) ---------------- */

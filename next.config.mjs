@@ -10,14 +10,7 @@ const nextConfig = {
   turbopack: { root: import.meta.dirname },
   // Belt-and-braces: keep 3D libraries out of any server bundle path.
   // (The dynamic import is already ssr:false; this guarantees it.)
-  serverExternalPackages: [
-    "three",
-    "@react-three/fiber",
-    "@react-three/drei",
-    "@react-three/postprocessing",
-    "maath",
-    "postprocessing",
-  ],
+  serverExternalPackages: ["three", "@react-three/fiber", "@react-three/drei", "maath"],
   ...(isGhPages
     ? { basePath: `/${repoName}`, assetPrefix: `/${repoName}/` }
     : {}),
