@@ -1,33 +1,62 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { damp } from "maath/easing";
 import { makeLabelTexture } from "../labels";
+import { getViewPointer } from "../pointer";
+import { useSiteStore } from "../../lib/store";
 import type { ReactNode } from "react";
+
+export type MiniPid = "certchain" | "legal-ai" | "cloud-nova";
 
 const ORANGE = "#FF6A13";
 
-function FloatTilt({ children }: { children: ReactNode }) {
+/**
+ * Float bob + tilt toward the pointer relative to THIS card's rect (§8.4,
+ * per-slot pointer — `state.pointer` maps to the whole page) + 0.25 hover
+ * lift. Reduced motion: static pose (bob/tilt off; hover lift kept — it is
+ * user-initiated feedback, not idle motion).
+ */
+function FloatTilt({ pid, children }: { pid: MiniPid; children: ReactNode }) {
   const g = useRef<THREE.Group>(null);
   const t = useRef(0);
-  useFrame((state, dt) => {
+  const [hovered, setHovered] = useState(false);
+  const reduced = useSiteStore((s) => s.reducedMotion);
+
+  useFrame((_state, dt) => {
     const grp = g.current;
     if (!grp) return;
     t.current += dt;
-    grp.position.y = Math.sin(t.current * 1.1) * 0.12;
-    const p = state.pointer;
-    damp(grp.rotation, "x", -p.y * 0.18, 4, dt);
-    damp(grp.rotation, "y", p.x * 0.28, 4, dt);
+    const bob = reduced ? 0 : Math.sin(t.current * 1.1) * 0.12;
+    damp(grp.position, "y", bob + (hovered ? 0.25 : 0), 5, dt);
+    const p = getViewPointer(`project-${pid}`);
+    const rx = !reduced && p ? -p.y * 0.18 : 0;
+    const ry = !reduced && p ? p.x * 0.28 : 0;
+    damp(grp.rotation, "x", rx, 4, dt);
+    damp(grp.rotation, "y", ry, 4, dt);
   });
-  return <group ref={g}>{children}</group>;
+
+  return (
+    <group
+      ref={g}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+      }}
+      onPointerOut={() => setHovered(false)}
+    >
+      {children}
+    </group>
+  );
 }
 
 function CertChain() {
   const chain = useRef<THREE.Group>(null);
   const badge = useRef<THREE.Group>(null);
   const t = useRef(0);
+  const reduced = useSiteStore((s) => s.reducedMotion);
 
   // 5x5 instanced QR pattern on the middle cube
   const qrCells = useMemo<Array<[number, number]>>(() => {
@@ -44,13 +73,14 @@ function CertChain() {
   }, []);
 
   useFrame((_, dt) => {
+    if (reduced) return; // static chain under reduced motion (§9)
     t.current += dt;
     if (chain.current) chain.current.position.x = Math.sin(t.current * 0.8) * 0.08;
     if (badge.current) badge.current.rotation.y += dt * 1.5;
   });
 
   return (
-    <FloatTilt>
+    <FloatTilt pid="certchain">
       <group ref={chain}>
         {[-1.3, -0.65, 0, 0.65, 1.3].map((x, i) => (
           <group key={i} position={[x, Math.sin(i) * 0.1, 0]} rotation={[0, i * 0.4, 0]}>
@@ -90,12 +120,14 @@ function CertChain() {
 function LegalAi() {
   const gavel = useRef<THREE.Group>(null);
   const t = useRef(0);
+  const reduced = useSiteStore((s) => s.reducedMotion);
   useFrame((_, dt) => {
+    if (reduced) return; // static pose under reduced motion (§9)
     t.current += dt;
     if (gavel.current) gavel.current.rotation.z = 0.5 + Math.sin(t.current * 2) * 0.35;
   });
   return (
-    <FloatTilt>
+    <FloatTilt pid="legal-ai">
       {[0, 1, 2, 3].map((i) => (
         <mesh key={i} position={[0, -0.7 + i * 0.38, Math.sin(i * 1.2) * 0.12]} rotation={[0, i * 0.3, 0]}>
           <boxGeometry args={[1.5, 0.04, 1.1]} />
@@ -128,6 +160,7 @@ function LegalAi() {
 function CloudNova() {
   const orbiter1 = useRef<THREE.Group>(null);
   const orbiter2 = useRef<THREE.Group>(null);
+  const reduced = useSiteStore((s) => s.reducedMotion);
   const puffs = useMemo<Array<[number, number, number, number]>>(() => {
     const arr: Array<[number, number, number, number]> = [];
     let seed = 7;
@@ -146,12 +179,13 @@ function CloudNova() {
   const labelRender = useMemo(() => makeLabelTexture("Render", { bg: "#FFB8CB", fg: "#16161a" }), []);
 
   useFrame((_, dt) => {
+    if (reduced) return; // static cloud under reduced motion (§9)
     if (orbiter1.current) orbiter1.current.rotation.y += dt * 0.9;
     if (orbiter2.current) orbiter2.current.rotation.y -= dt * 0.7;
   });
 
   return (
-    <FloatTilt>
+    <FloatTilt pid="cloud-nova">
       {puffs.map(([x, y, z, r], i) => (
         <mesh key={i} position={[x, y, z]}>
           <sphereGeometry args={[r, 24, 24]} />
@@ -174,7 +208,7 @@ function CloudNova() {
   );
 }
 
-export default function ProjectMini({ pid }: { pid: "certchain" | "legal-ai" | "cloud-nova" }) {
+export default function ProjectMini({ pid }: { pid: MiniPid }) {
   if (pid === "certchain") return <CertChain />;
   if (pid === "legal-ai") return <LegalAi />;
   return <CloudNova />;

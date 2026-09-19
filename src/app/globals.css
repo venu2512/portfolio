@@ -260,12 +260,13 @@ html.enhanced .reveal.in {
   }
 }
 
-/* Headline line-mask reveal */
+/* Headline line-mask reveal — hidden state ONLY under html.enhanced so the
+   headline is fully visible without JS (no-JS must never hide content). */
 .line-mask {
   display: block;
   overflow: hidden;
 }
-.line-mask > span {
+html.enhanced .line-mask > span {
   display: block;
   transform: translateY(110%);
 }
@@ -276,7 +277,7 @@ html.enhanced .line-mask.in > span {
 html.enhanced .line-mask.in:nth-child(2) > span { transition-delay: 60ms; }
 html.enhanced .line-mask.in:nth-child(3) > span { transition-delay: 120ms; }
 @media (prefers-reduced-motion: reduce) {
-  .line-mask > span,
+  html.enhanced .line-mask > span,
   html.enhanced .line-mask.in > span {
     transform: none;
     transition: none;
@@ -542,6 +543,15 @@ dialog.project-dialog::backdrop {
 }
 .announce button:hover {
   opacity: 1;
+}
+
+/* ---------------- Page-load intro (§6) ---------------- */
+@keyframes intro-lift {
+  from { transform: scaleY(1); }
+  to { transform: scaleY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-wipe { display: none; }
 }
 
 /* ---------------- Section rhythm ---------------- */

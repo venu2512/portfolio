@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
 import useViewRegistration from "../../lib/useViewRegistration";
+import { useSlotPointer } from "../../three/pointer";
 
 export type ProjectId = "certchain" | "legal-ai" | "cloud-nova";
 
@@ -51,6 +52,8 @@ export default function ProjectSlot({
   // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
   const id = `project-${pid}`;
   useViewRegistration(id, ref, visible);
+  // Pointer relative to THIS rect, read by the project mini-scene in useFrame.
+  useSlotPointer(id, ref);
 
   return (
     <div

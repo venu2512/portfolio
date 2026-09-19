@@ -36,7 +36,8 @@ export default function Boot() {
     if (t === "dark" || t === "light") st.set("theme", t);
 
     // --- Tier + WebGL ---
-    st.set("detectedTier", detectTier());
+    const tier = detectTier();
+    st.set("detectedTier", tier);
     const hasWebgl = webglSupported();
     if (!hasWebgl) st.set("webgl", "unsupported");
 
@@ -65,7 +66,10 @@ export default function Boot() {
     applyMode();
     const unsub = useSiteStore.subscribe(applyMode);
 
-    void enableLenis();
+    void enableLenis().then(() => {
+      // §10: low tier drops Lenis (every frame matters there).
+      if (tier === "low") destroyLenis();
+    });
 
     const id = window.setTimeout(() => setHydrated(true), 0);
 

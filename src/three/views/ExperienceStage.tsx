@@ -33,13 +33,14 @@ function KreupaiScene() {
   const tools = experience[0]?.tools ?? [];
   const orbit = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  const reduced = useSiteStore((s) => s.reducedMotion);
   // Calm static badge plate (no pulsing "live/active" beacon — §8.2).
   const badge = useMemo(() => makeLabelTexture("AISA", { bg: "#FFE3CF", fg: "#16161a" }), []);
 
   useFrame((_, dt) => {
     const g = orbit.current;
     if (!g) return;
-    g.rotation.y += (hovered ? 0.15 : 0.4) * dt;
+    if (!reduced) g.rotation.y += (hovered ? 0.15 : 0.4) * dt; // idle orbit off under reduced motion (§9)
     for (const c of g.children) {
       const target = hovered && (c.userData.label as string) === hovered ? 1.3 : 1;
       damp(c.scale, "x", target, 8, dt);
@@ -107,8 +108,10 @@ function KreupaiScene() {
 function QuadScene() {
   const bars = useRef<Array<THREE.Mesh | null>>([]);
   const targetHeights = useMemo(() => [0.5, 0.9, 0.65, 1.15, 0.8, 1.0, 0.55], []);
+  const reduced = useSiteStore((s) => s.reducedMotion);
 
   useFrame((_, dt) => {
+    if (reduced) return; // static bars under reduced motion (§9)
     bars.current.forEach((m, i) => {
       if (!m) return;
       const th = targetHeights[i] ?? 0.5;
@@ -157,8 +160,10 @@ function NitroScene() {
   );
   const pulse = useRef(0);
   const mats = useRef<Array<{ mat: THREE.MeshStandardMaterial; layer: number }>>([]);
+  const reduced = useSiteStore((s) => s.reducedMotion);
 
   useFrame((_, dt) => {
+    if (reduced) return; // static graph under reduced motion (§9)
     pulse.current += dt;
     const wave = ((pulse.current % 2.5) / 2.5) * 4;
     for (const { mat, layer } of mats.current) {

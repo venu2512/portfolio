@@ -153,14 +153,16 @@ async function main() {
 }
 
 async function writeMeta(partial) {
-  const meta = { generatedAt: new Date().toISOString(), ...partial };
+  // No timestamp: the file is committed, so it must stay byte-stable across
+  // runs or every build would dirty the working tree.
   mkdirSync(dirname(outMeta), { recursive: true });
-  writeFileSync(outMeta, JSON.stringify(meta, null, 2));
+  writeFileSync(outMeta, JSON.stringify(partial, null, 2) + "\n");
 }
 
 main().catch((err) => {
   console.error("[photo] FAILED:", err);
   // Never fail the build because of the photo pipeline.
-  writeFileSync(outMeta, JSON.stringify({ hasPhoto: false, hasCutout: false }));
+  mkdirSync(dirname(outMeta), { recursive: true });
+  writeFileSync(outMeta, JSON.stringify({ hasPhoto: false, hasCutout: false }, null, 2) + "\n");
   process.exit(0);
 });

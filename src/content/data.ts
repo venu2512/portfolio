@@ -17,7 +17,9 @@ export const profile = {
   // OWNER: confirm
   location: "Madurai, Tamil Nadu, India",
   email: "Venu25122005@gmail.com",
-  phone: "+91-7010422347",
+  // No `phone` field exists: while the owner's number is private, the site
+  // contains no phone JSX and no phone string anywhere (§3.3 structural guard).
+  // When the owner wants it shown, re-add `phone` AND the JSX in CtaBanner.
   showPhone: false,
   linkedin: "https://linkedin.com/in/venugopal-v-61a50b3a9",
   github: "https://github.com/venu2512",

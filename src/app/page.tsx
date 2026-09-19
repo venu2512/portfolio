@@ -1,5 +1,6 @@
 import ToastProvider from "../components/Toast";
 import Boot from "../components/Boot";
+import Intro from "../components/Intro";
 import ScrollProgress from "../components/ScrollProgress";
 import Cursor from "../components/Cursor";
 import AnnouncementBar from "../components/AnnouncementBar";
@@ -26,6 +27,7 @@ export default function Page() {
         </div>
       </noscript>
       <Boot />
+      <Intro />
       <ScrollProgress />
       <Cursor />
       {/* #app-root wraps the page so the fixed 3D canvas can use it as its

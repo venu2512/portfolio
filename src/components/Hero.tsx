@@ -1,6 +1,7 @@
 "use client";
 
 import { profile } from "../content/data";
+import { useReveal } from "../lib/hooks";
 import Magnetic from "./Magnetic";
 import Reveal from "./Reveal";
 import HeroSlot from "./three/HeroSlot";
@@ -12,6 +13,8 @@ const LINES: string[] = (() => {
 })();
 
 export default function Hero() {
+  // One reveal trigger drives the line-mask (.in) and the rest of the hero.
+  const { ref: heroRef, inView: heroInView } = useReveal<HTMLDivElement>();
   const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const go = (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -20,7 +23,7 @@ export default function Hero() {
 
   return (
     <section id="hero" className="wrap pt-10 pb-16 md:pt-16 md:pb-24">
-      <div className="grid md:grid-cols-2 gap-10 items-center">
+      <div ref={heroRef} className="grid md:grid-cols-2 gap-10 items-center">
         <div>
           <Reveal>
             <span className="pill">
@@ -30,7 +33,7 @@ export default function Hero() {
           </Reveal>
           <h1 className="h1 mt-6">
             {LINES.map((line, i) => (
-              <span key={i} className="line-mask">
+              <span key={i} className={`line-mask ${heroInView ? "in" : ""}`}>
                 <span>{line}</span>
               </span>
             ))}

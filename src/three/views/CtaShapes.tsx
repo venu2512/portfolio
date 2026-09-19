@@ -4,23 +4,33 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { damp } from "maath/easing";
+import { useSiteStore } from "../../lib/store";
+import { getViewPointer } from "../pointer";
 
+/**
+ * CTA view (§8.5): floating pastel torus/sphere/rounded cube/ring with mouse
+ * parallax inside the banner. Pointer is read relative to the CTA slot rect;
+ * reduced motion keeps a static pose.
+ */
 export default function CtaShapes() {
   const g = useRef<THREE.Group>(null);
   const t = useRef(0);
+  const reduced = useSiteStore((s) => s.reducedMotion);
 
-  useFrame((state, dt) => {
+  useFrame((_state, dt) => {
     const grp = g.current;
     if (!grp) return;
     t.current += dt;
-    grp.children.forEach((c, i) => {
-      c.position.y += Math.sin(t.current * (0.8 + i * 0.15) + i) * 0.002;
-      c.rotation.y += dt * (0.2 + i * 0.08);
-      c.rotation.x += dt * 0.1;
-    });
-    const p = state.pointer;
-    damp(grp.rotation, "x", -p.y * 0.1, 3, dt);
-    damp(grp.rotation, "y", p.x * 0.16, 3, dt);
+    if (!reduced) {
+      grp.children.forEach((c, i) => {
+        c.position.y += Math.sin(t.current * (0.8 + i * 0.15) + i) * 0.002;
+        c.rotation.y += dt * (0.2 + i * 0.08);
+        c.rotation.x += dt * 0.1;
+      });
+    }
+    const p = getViewPointer("cta");
+    damp(grp.rotation, "x", p && !reduced ? -p.y * 0.1 : 0, 3, dt);
+    damp(grp.rotation, "y", p && !reduced ? p.x * 0.16 : 0, 3, dt);
   });
 
   return (

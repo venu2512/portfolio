@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
 import Photo from "../Photo";
 import useViewRegistration from "../../lib/useViewRegistration";
+import { useSlotPointer } from "../../three/pointer";
 
 /**
  * Hero 3D slot. The DOM fallback (framed photo + CSS floating chips) is
@@ -17,6 +18,8 @@ export default function HeroSlot() {
   // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
   const id = "hero";
   useViewRegistration(id, ref, visible);
+  // Pointer relative to THIS rect (§8.1), read by the medallion in useFrame.
+  useSlotPointer(id, ref);
 
   return (
     <div

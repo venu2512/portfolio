@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 /**
  * Keycap Cloud (§8.3): one rounded keycap per skill on a Fibonacci sphere
  * (bands ordered by category). Drag with inertia + idle spin; hover pops the
@@ -16,6 +14,7 @@ import * as THREE from "three";
 import { Html } from "@react-three/drei";
 import { damp } from "maath/easing";
 import { skills } from "../../content/data";
+import { useSiteStore } from "../../lib/store";
 import { makeLabelTexture } from "../labels";
 import { skillsFilterRef, onSkillsFilterChange } from "../filterMirror";
 
@@ -108,6 +107,7 @@ export default function KeycapCloud() {
   const group = useRef<THREE.Group>(null);
   const [tooltip, setTooltip] = useState<string | null>(null);
   const [filter, setFilter] = useState(skillsFilterRef.current);
+  const reduced = useSiteStore((s) => s.reducedMotion);
   const dragging = useRef(false);
   const vel = useRef({ x: 0, y: 0 });
   const last = useRef({ x: 0, y: 0 });
@@ -157,7 +157,7 @@ export default function KeycapCloud() {
     if (!dragging.current) {
       vel.current.x *= Math.exp(-dt * 2.5);
       vel.current.y *= Math.exp(-dt * 2.5);
-      g.rotation.y += 0.1 * dt; // idle rotation
+      if (!reduced) g.rotation.y += 0.1 * dt; // idle rotation (off under reduced motion, §9)
     }
     g.rotation.x += vel.current.x;
     g.rotation.y += vel.current.y;

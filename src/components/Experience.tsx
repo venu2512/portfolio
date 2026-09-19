@@ -15,6 +15,12 @@ export default function Experience() {
         <h2 className="h2 mt-2">Where I&apos;ve worked</h2>
       </Reveal>
 
+      {/* Mobile: sticky 30svh strip above the cards (§6). Desktop: layout is
+          grid (cards left, sticky stage right), so this copy never shows. */}
+      <div className="lg:hidden sticky top-16 z-10 mt-8" style={{ height: "30svh" }}>
+        <ExperienceSlot />
+      </div>
+
       <div className="mt-8 grid lg:grid-cols-2 gap-8">
         {/* Cards */}
         <div className="flex flex-col gap-5">
@@ -63,8 +69,8 @@ export default function Experience() {
           ))}
         </div>
 
-        {/* Sticky 3D stage (desktop) / top strip (mobile) */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        {/* Sticky 3D stage (desktop column) — the mobile strip is above. */}
+        <div className="hidden lg:sticky lg:top-24 lg:self-start lg:block">
           <ExperienceSlot />
         </div>
       </div>

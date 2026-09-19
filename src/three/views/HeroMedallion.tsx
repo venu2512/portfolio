@@ -15,13 +15,14 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { damp } from "maath/easing";
 import { useSiteStore } from "../../lib/store";
 import { profile, skills, keycapLabel } from "../../content/data";
 import photoMeta from "../../content/photo-meta.json";
 import { makeRoundedRectMask, coverFit } from "../labels";
+import { getViewPointer } from "../pointer";
 import BlobShadow from "../BlobShadow";
 
 const CHIP_COLORS: Record<string, string> = {
@@ -53,6 +54,7 @@ function useHeroChips(): Array<{ label: string; color: string }> {
 function Blob() {
   const meshRef = useRef<THREE.Mesh>(null);
   const base = useRef<Float32Array | null>(null);
+  const reduced = useSiteStore((s) => s.reducedMotion);
   const mat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
@@ -67,6 +69,7 @@ function Blob() {
     const mesh = meshRef.current;
     const pos = mesh?.geometry.attributes.position;
     if (!mesh || !pos) return;
+    if (reduced) return; // static blob under reduced motion (§9)
     // Capture the rest pose once (first frame) for the noise displacement.
     if (!base.current) base.current = Float32Array.from(pos.array);
     const t = clock.elapsedTime;
@@ -98,6 +101,7 @@ export default function HeroMedallion() {
   const [texReady, setTexReady] = useState(false);
   const theme = useSiteStore((s) => s.theme);
   const reduced = useSiteStore((s) => s.reducedMotion);
+  const maxAnisotropy = useThree((s) => s.gl.capabilities.getMaxAnisotropy());
   const chips = useHeroChips();
 
   const hasPhoto = (photoMeta as { hasPhoto: boolean }).hasPhoto;
@@ -115,12 +119,13 @@ export default function HeroMedallion() {
     const id = window.setTimeout(() => {
       // Texture objects live outside React's tree — mutation is intentional.
       photoTex.colorSpace = THREE.SRGBColorSpace;
-      photoTex.anisotropy = Math.min(8, 8); // capped (§7): 8 is the budget max
+      // §7: cap anisotropy at 8, never above what the GPU supports.
+      photoTex.anisotropy = Math.min(8, maxAnisotropy);
       coverFit(photoTex as never, 1, profile.photo.focus);
       setTexReady(true);
     }, 0);
     return () => window.clearTimeout(id);
-  }, [photoTex]);
+  }, [photoTex, maxAnisotropy]);
 
   const mask = useMemo(() => makeRoundedRectMask(0.12, 512), []);
   const bezelMat = useMemo(
@@ -152,20 +157,22 @@ export default function HeroMedallion() {
   const lastPointer = useRef(0);
   const t = useRef(0);
 
-  useFrame((state, dt) => {
+  useFrame((_state, dt) => {
     const g = group.current;
     if (!g) return;
     t.current += dt;
-    const p = state.pointer; // -1..1 across the eventSource (the page)
+    // Pointer relative to the hero placeholder rect (§8.1), not the window.
+    const p = getViewPointer("hero");
     const now = performance.now();
-    if (Math.abs(p.x) + Math.abs(p.y) > 0.001) lastPointer.current = now;
+    if (p && now - p.last < 120) lastPointer.current = now;
 
     // Idle sway after 2 s without pointer input (also the touch behavior).
     const idle = now - lastPointer.current > 2000;
     const swayX = idle ? Math.sin(t.current * 0.6) * 0.06 : 0;
     const swayY = idle ? Math.sin(t.current * 0.6) * 0.12 : 0;
-    const tx = reduced ? 0 : -p.y * 0.22 + swayX;
-    const ty = reduced ? 0 : p.x * 0.35 + swayY;
+    // Reduced motion: no tilt, no sway — static pose only.
+    const tx = reduced ? 0 : (p ? -p.y * 0.22 : 0) + swayX;
+    const ty = reduced ? 0 : (p ? p.x * 0.35 : 0) + swayY;
     damp(g.rotation, "x", tx, 5, dt);
     damp(g.rotation, "y", ty, 5, dt);
 

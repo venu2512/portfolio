@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
 import useViewRegistration from "../../lib/useViewRegistration";
+import { useSlotPointer } from "../../three/pointer";
 
 /**
  * CTA 3D slot. CSS pastel-shapes fallback always rendered beneath; CanvasRoot
@@ -14,6 +15,8 @@ export default function CtaSlot() {
   // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
   const id = "cta";
   useViewRegistration(id, ref, visible);
+  // Pointer relative to THIS rect, read by CtaShapes in useFrame.
+  useSlotPointer(id, ref);
 
   return (
     <div
