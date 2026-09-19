@@ -16,31 +16,43 @@
   --color-blush: var(--blush);
   --color-sky: var(--sky);
   --color-cream: var(--cream);
+  --color-navy: var(--navy);
+  --color-navy-ink: var(--navy-ink);
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --radius-card: 28px;
+  --radius-card: 20px;
 }
 
-/* ---------------- Design tokens (light default) ---------------- */
+/* ---------------- Design tokens (light default) ----------------
+   Metamask-2026-inspired system: white-first surfaces, hairline borders,
+   deep-navy bento bands (`--navy`, signature metamask moment), fox-orange
+   accent, layered soft shadows, spring overshoot easing, small card radii. */
 :root {
   color-scheme: light;
-  --bg: #f7f5f2;
+  --bg: #fdfdfc;
   --surface: #ffffff;
-  --surface-2: #f0ede8;
-  --ink: #16161a;
-  --muted: #6b6b76;
-  --line: rgba(22, 22, 26, 0.08);
-  --primary: #ff6a13;
+  --surface-2: #f4f3f5;
+  --ink: #15151a;
+  --muted: #6f6e78;
+  --line: rgba(21, 21, 26, 0.09);
+  --primary: #f6851b;
   --primary-ink: #ffffff;
-  --primary-soft: #ffe3cf;
+  --primary-soft: #ffe6cf;
   --lavender: #e4dbff;
   --blush: #ffdde6;
   --sky: #d5e9ff;
   --cream: #fff3d6;
   --green: #22c55e;
-  --shadow-card: 0 20px 60px -20px rgba(22, 22, 26, 0.18);
-  --shadow-pop: 0 12px 40px -12px rgba(22, 22, 26, 0.28);
-  --radius-card: 28px;
+  --navy: #171033;
+  --navy-ink: #f1eeff;
+  --navy-muted: rgba(241, 238, 255, 0.62);
+  --shadow-card: 0 1px 2px rgba(21, 21, 26, 0.04),
+    0 10px 30px -12px rgba(21, 21, 26, 0.18),
+    0 30px 60px -30px rgba(21, 21, 26, 0.14);
+  --shadow-pop: 0 4px 10px -2px rgba(21, 21, 26, 0.08),
+    0 18px 40px -12px rgba(21, 21, 26, 0.24);
+  --radius-card: 20px;
+  --spring: cubic-bezier(0.4, 1.35, 0.5, 0.97);
 }
 
 [data-theme="dark"] {
@@ -50,8 +62,8 @@
   --surface-2: #1f1f26;
   --ink: #f4f2ee;
   --muted: #a0a0ab;
-  --line: rgba(255, 255, 255, 0.08);
-  --primary: #ff7a2b;
+  --line: rgba(255, 255, 255, 0.1);
+  --primary: #ff8c3a;
   --primary-ink: #1a1208;
   --primary-soft: #3a2314;
   --lavender: #2a2545;
@@ -59,8 +71,16 @@
   --sky: #1b2c3d;
   --cream: #3a3220;
   --green: #4ade80;
-  --shadow-card: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
-  --shadow-pop: 0 12px 40px -12px rgba(0, 0, 0, 0.7);
+  --navy: #14102e;
+  --navy-ink: #eeeaff;
+  --navy-muted: rgba(238, 234, 255, 0.6);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4),
+    0 12px 32px -12px rgba(0, 0, 0, 0.5),
+    0 32px 64px -32px rgba(0, 0, 0, 0.5);
+  --shadow-pop: 0 4px 10px -2px rgba(0, 0, 0, 0.5),
+    0 18px 40px -12px rgba(0, 0, 0, 0.6);
+  --radius-card: 20px;
+  --spring: cubic-bezier(0.4, 1.35, 0.5, 0.97);
 }
 
 html {
@@ -88,15 +108,21 @@ body {
 
 /* ---------------- Type scale ---------------- */
 .h1 {
-  font-size: clamp(2.6rem, 6vw, 5.5rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
+  font-size: clamp(3.2rem, 7.5vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
   font-weight: 800;
 }
 .h2 {
-  font-size: clamp(1.9rem, 3.6vw, 3rem);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.2rem, 4.6vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+/* Italic accent word inside a heading — the metamask "money" flourish. */
+.accent {
+  font-style: italic;
+  color: var(--primary);
   font-weight: 800;
 }
 .mono-label {
@@ -119,6 +145,16 @@ body {
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
 }
+/* Deep-navy bento band surface (metamask consumer-blue-dark signature). */
+.card-navy {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-card);
+}
+.navy-band {
+  background: var(--navy);
+  border-radius: var(--radius-card);
+}
 
 /* ---------------- Buttons ---------------- */
 .btn {
@@ -132,7 +168,7 @@ body {
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+  transition: transform 300ms var(--spring), box-shadow 300ms ease, background 200ms ease;
   will-change: transform;
 }
 .btn-primary {
@@ -144,7 +180,7 @@ body {
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px -8px rgba(255, 106, 19, 0.55);
+  box-shadow: 0 10px 30px -8px rgba(246, 133, 27, 0.55);
 }
 .btn-secondary {
   background: var(--surface);
@@ -184,6 +220,12 @@ body {
   background: var(--surface);
   color: var(--ink);
   white-space: nowrap;
+}
+/* Chips inside the deep-navy band — translucent white, light ink. */
+.chip-on-navy {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: var(--navy-ink);
 }
 .chip-primary { background: var(--primary-soft); border-color: transparent; color: var(--ink); }
 .chip-lavender { background: var(--lavender); border-color: transparent; color: var(--ink); }

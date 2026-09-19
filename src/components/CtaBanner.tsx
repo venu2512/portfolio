@@ -41,7 +41,7 @@ export default function CtaBanner() {
         <div className="card overflow-hidden relative" style={{ background: "var(--primary)" }}>
           <div className="grid md:grid-cols-5 gap-6 items-center">
             <div className="md:col-span-3 p-8 md:p-12" style={{ color: "#fff" }}>
-              <h2 className="h2">Let&apos;s build something intelligent.</h2>
+              <h2 className="h2">Let&apos;s build something <em className="accent" style={{ color: "#fff" }}>intelligent</em>.</h2>
               <p className="mt-4 text-white/85 max-w-md">{profile.openTo}.</p>
               {/* No phone JSX anywhere while the number is private (§3.3):
                   re-add only together with a `phone` field in data.ts. */}

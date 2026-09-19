@@ -20,7 +20,7 @@ export default function Faq() {
     <section id="faq" className="wrap section">
       <Reveal>
         <p className="mono-label">FAQ</p>
-        <h2 className="h2 mt-2">Questions, answered</h2>
+        <h2 className="h2 mt-2">Questions, <em className="accent">answered</em></h2>
       </Reveal>
       <Reveal delay={80}>
         <div className="mt-6 card px-7 py-2">

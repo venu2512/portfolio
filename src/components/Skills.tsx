@@ -18,7 +18,7 @@ export default function Skills() {
     <section id="skills" className="wrap section">
       <Reveal>
         <p className="mono-label">Skills</p>
-        <h2 className="h2 mt-2">Tools of the trade</h2>
+        <h2 className="h2 mt-2">Tools of the <em className="accent">trade</em></h2>
       </Reveal>
 
       <Reveal delay={80}>

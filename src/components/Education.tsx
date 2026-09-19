@@ -6,7 +6,7 @@ export default function Education() {
     <section id="education" className="wrap section">
       <Reveal>
         <p className="mono-label">Education</p>
-        <h2 className="h2 mt-2">Where I studied</h2>
+        <h2 className="h2 mt-2">Where I <em className="accent">studied</em></h2>
       </Reveal>
       <div className="mt-8 timeline flex flex-col gap-6">
         {education.map((e, i) => (

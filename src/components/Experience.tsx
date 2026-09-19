@@ -12,7 +12,7 @@ export default function Experience() {
     <section id="experience" className="wrap section">
       <Reveal>
         <p className="mono-label">Experience</p>
-        <h2 className="h2 mt-2">Where I&apos;ve worked</h2>
+        <h2 className="h2 mt-2">Where I&apos;ve <em className="accent">worked</em></h2>
       </Reveal>
 
       {/* Mobile: sticky 30svh strip above the cards (§6). Desktop: layout is

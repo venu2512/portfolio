@@ -9,8 +9,11 @@ const LINKS = ["about", "experience", "skills", "projects", "education", "faq", 
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="wrap pb-10">
-      <div className="card p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+    <footer className="wrap pb-10 pt-4">
+      <div
+        className="flex flex-col md:flex-row items-center justify-between gap-6 py-8"
+        style={{ borderTop: "1px solid var(--line)" }}
+      >
         <div className="flex items-center gap-3">
           <span
             className="flex h-9 w-9 items-center justify-center rounded-full text-sm text-white"

@@ -115,7 +115,7 @@ export default function Projects() {
     <section id="projects" className="wrap section">
       <Reveal>
         <p className="mono-label">Projects</p>
-        <h2 className="h2 mt-2">Selected work</h2>
+        <h2 className="h2 mt-2">Selected <em className="accent">work</em></h2>
       </Reveal>
 
       <div className="mt-8 flex flex-col gap-8">
