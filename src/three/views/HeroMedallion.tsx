@@ -7,8 +7,8 @@
  *    floating keycap chips (heroChips × category colors), soft orange glow.
  *  B (photo + cutout): back = animated orange blob (icosphere + sin noise),
  *    mid = cutout plane, front = chips; parallax scales by depth.
- *  C (no photo): slab with an orange rounded panel (monogram lives in the DOM
- *    fallback).
+ *  C (no photo): slab with an orange rounded panel carrying a canvas-drawn
+ *    "VV" monogram texture (same look as the DOM fallback badge).
  * Cursor tracking damps rotation toward the pointer relative to the page
  * (eventSource = #app-root), with idle sway after 2 s without pointer input —
  * also the touch behavior. Reduced motion: static pose, no chips bob.
@@ -21,7 +21,7 @@ import { damp } from "maath/easing";
 import { useSiteStore } from "../../lib/store";
 import { profile, skills, keycapLabel } from "../../content/data";
 import photoMeta from "../../content/photo-meta.json";
-import { makeRoundedRectMask, coverFit } from "../labels";
+import { makeRoundedRectMask, coverFit, makeMonogramTexture } from "../labels";
 import { getViewPointer } from "../pointer";
 import BlobShadow from "../BlobShadow";
 
@@ -128,6 +128,9 @@ export default function HeroMedallion() {
   }, [photoTex, maxAnisotropy]);
 
   const mask = useMemo(() => makeRoundedRectMask(0.12, 512), []);
+  // Mode C (no photo): "VV" plate rendered via canvas texture (§8.1), matching
+  // the DOM fallback badge. Rounded by the shared mask below.
+  const monogramTex = useMemo(() => (hasPhoto ? null : makeMonogramTexture("VV", 512)), [hasPhoto]);
   const bezelMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
@@ -245,7 +248,7 @@ export default function HeroMedallion() {
             {photoTex ? (
               <meshBasicMaterial map={photoTex} alphaMap={mask} alphaTest={0.5} toneMapped={false} />
             ) : (
-              <meshBasicMaterial color="#FF6A13" alphaMap={mask} alphaTest={0.5} />
+              <meshBasicMaterial map={monogramTex ?? undefined} alphaMap={mask} alphaTest={0.5} toneMapped={false} />
             )}
           </mesh>
           <group ref={chipsGroup}>

@@ -58,6 +58,47 @@ export function makeLabelTexture(text: string, opts: LabelOpts = {}): THREE.Canv
   return tex;
 }
 
+/**
+ * Full-bleed square monogram texture (orange gradient plate + extrabold white
+ * "VV"), matching the DOM `<Photo>` fallback badge. The material's alphaMap
+ * (rounded-rect mask) supplies the rounding, so the plate fills the plane.
+ */
+export function makeMonogramTexture(text = "VV", size = 512): THREE.CanvasTexture {
+  const key = `monogram|${text}|${size}`;
+  const hit = cache.get(key);
+  if (hit) return hit;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d")!;
+
+  // Diagonal orange gradient — same look as the CSS fallback badge.
+  const grad = ctx.createLinearGradient(0, 0, size, size);
+  grad.addColorStop(0, "#FF6A13");
+  grad.addColorStop(1, "#ff9a4d");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+
+  // Auto-shrink from a large size down to fit ~55% of the plate.
+  let fs = Math.round(size * 0.46);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  do {
+    ctx.font = `800 ${fs}px "Plus Jakarta Sans", sans-serif`;
+    fs -= 2;
+  } while (ctx.measureText(text).width > size * 0.55 && fs > 20);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillText(text, size / 2, size / 2 + size * 0.02);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  cache.set(key, tex);
+  return tex;
+}
+
 /** Rounded-rect alpha mask texture for the medallion photo plane. */
 export function makeRoundedRectMask(radiusFraction = 0.12, size = 512): THREE.CanvasTexture {
   const key = `mask|${radiusFraction}|${size}`;
