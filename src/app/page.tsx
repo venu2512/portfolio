@@ -28,21 +28,26 @@ export default function Page() {
       <Boot />
       <ScrollProgress />
       <Cursor />
-      <AnnouncementBar />
-      <Navbar />
-      <main>
-        <Hero />
-        <TechMarquee />
-        <StatsStrip />
-        <About />
-        <Experience />
-        <Skills />
-        <Projects />
-        <Education />
-        <Faq />
-        <CtaBanner />
-      </main>
-      <Footer />
+      {/* #app-root wraps the page so the fixed 3D canvas can use it as its
+          event source: pointer coordinates map to real page geometry, and
+          hover/click reach the 3D objects inside the view slots. */}
+      <div id="app-root">
+        <AnnouncementBar />
+        <Navbar />
+        <main>
+          <Hero />
+          <TechMarquee />
+          <StatsStrip />
+          <About />
+          <Experience />
+          <Skills />
+          <Projects />
+          <Education />
+          <Faq />
+          <CtaBanner />
+        </main>
+        <Footer />
+      </div>
     </ToastProvider>
   );
 }

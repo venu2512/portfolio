@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef } from "react";
+import { useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
 import { useSiteStore } from "../../lib/store";
 import Photo from "../Photo";
@@ -13,7 +13,8 @@ import useViewRegistration from "../../lib/useViewRegistration";
 export default function HeroSlot() {
   const ref = useRef<HTMLDivElement>(null);
   const { visible } = useInViewMargin(ref);
-  const id = useId();
+  // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
+  const id = "hero";
   const webgl = useSiteStore((s) => s.webgl);
   const simpleView = useSiteStore((s) => s.simpleView);
   useViewRegistration(id, ref, visible);
@@ -40,10 +41,10 @@ export default function HeroSlot() {
               QLoRA
             </div>
             <div className="absolute bottom-6 -left-2 chip chip-blush" style={{ animation: "cue-bob 4.2s ease-in-out infinite" }}>
-              Ethereum
+              React.js
             </div>
             <div className="absolute bottom-2 right-4 chip chip-cream">
-              Python
+              Power BI
             </div>
           </div>
         </div>

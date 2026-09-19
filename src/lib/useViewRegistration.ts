@@ -4,9 +4,12 @@ import { useEffect, type RefObject } from "react";
 import { useSiteStore } from "./store";
 
 /**
- * Registers/unregisters a 3D placeholder in the shared registry that
- * CanvasRoot's <View track={...}> elements read from. Registry ids embed the
- * slot kind (e.g. "hero", "project-certchain") as the last path segment.
+ * Registers a 3D placeholder in the shared registry that CanvasRoot's Views
+ * read from — only while its placeholder is within the visibility margin
+ * (200px). Invisible slots are NOT in the registry, so the low/medium-tier
+ * maxActiveViews cap always picks the views actually on screen. Registry ids
+ * are stable slot kinds ("hero", "experience", "skills", "cta",
+ * "project-<pid>") matching CanvasRoot's VIEW_ORDER.
  */
 export default function useViewRegistration(
   id: string,
@@ -16,20 +19,8 @@ export default function useViewRegistration(
   const set = useSiteStore((s) => s.set);
 
   useEffect(() => {
-    const next = new Set(useSiteStore.getState().visibleViews);
-    next.add(id);
-    set("visibleViews", next);
-    return () => {
-      const s = useSiteStore.getState();
-      const n = new Set(s.visibleViews);
-      n.delete(id);
-      s.set("visibleViews", n);
-    };
-  }, [id, set]);
-
-  useEffect(() => {
     const cur = useSiteStore.getState().visibleViews;
-    if (visible === cur.has(id)) return;
+    if (cur.has(id) === visible) return;
     const next = new Set(cur);
     if (visible) next.add(id);
     else next.delete(id);

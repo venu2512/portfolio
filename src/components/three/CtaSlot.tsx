@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef } from "react";
+import { useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
 import { useSiteStore } from "../../lib/store";
 import useViewRegistration from "../../lib/useViewRegistration";
@@ -8,7 +8,8 @@ import useViewRegistration from "../../lib/useViewRegistration";
 export default function CtaSlot() {
   const ref = useRef<HTMLDivElement>(null);
   const { visible } = useInViewMargin(ref);
-  const id = useId();
+  // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
+  const id = "cta";
   const webgl = useSiteStore((s) => s.webgl);
   const simpleView = useSiteStore((s) => s.simpleView);
   useViewRegistration(id, ref, visible);

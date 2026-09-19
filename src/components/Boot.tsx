@@ -89,7 +89,7 @@ export default function Boot() {
   const showCanvas = hydrated && !simpleView && webgl === "ok" && !forcedSimple;
 
   return (
-    <div id="app-root">
+    <>
       {showCanvas && <CanvasLoader />}
       {webgl === "lost" && (
         <div className="fixed bottom-3 left-3 z-[75] rounded-xl px-3 py-2 text-xs card" role="status">
@@ -99,6 +99,6 @@ export default function Boot() {
           </button>
         </div>
       )}
-    </div>
+    </>
   );
 }

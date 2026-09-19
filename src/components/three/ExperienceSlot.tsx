@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInViewMargin } from "../../lib/hooks";
 import { useSiteStore } from "../../lib/store";
 import useViewRegistration from "../../lib/useViewRegistration";
@@ -13,7 +13,8 @@ import { setActiveExperience } from "../../lib/activeExp";
 export default function ExperienceSlot() {
   const ref = useRef<HTMLDivElement>(null);
   const { visible } = useInViewMargin(ref);
-  const id = useId();
+  // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
+  const id = "experience";
   const webgl = useSiteStore((s) => s.webgl);
   const simpleView = useSiteStore((s) => s.simpleView);
   const [active, setActive] = useState(0);

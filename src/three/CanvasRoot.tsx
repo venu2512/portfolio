@@ -1,11 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+/**
+ * Shared fixed canvas (z 30, pointer-events none) that renders drei <View>s
+ * tracked to DOM placeholders (`[data-view="…"]`), per the migration spec §5:
+ *
+ * - One Canvas, many views: every 3D slot is a plain <div> placeholder in the
+ *   page; the canvas draws each <View> exactly into its rect via
+ *   `<View.Port />` (rendered once below — without it nothing ever draws).
+ * - Pointer events: the canvas is an inert overlay; R3F raycasting routes
+ *   through `eventSource=#app-root` (the page wrapper), so hover/click reach
+ *   the 3D objects while page scroll keeps working (touch-action: pan-y).
+ * - Registry: slots register stable ids ("hero", "experience", "skills",
+ *   "cta", "project-<pid>") + visibility in the store; only visible views are
+ *   mounted, capped at tierTables(tier).maxActiveViews (low tier = hero only).
+ * - Tier: drei <PerformanceMonitor> steps down on decline; after 3 flip-flops
+ *   it locks to the lower tier for the rest of the session (onFallback) —
+ *   adaptation pauses instead of being disabled entirely.
+ * - Hidden tab: frameloop="never" while document.hidden.
+ */
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { View, PerformanceMonitor, PerspectiveCamera } from "@react-three/drei";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, createElement, type ReactElement } from "react";
 import * as THREE from "three";
-import { useSiteStore } from "../lib/store";
+import { useSiteStore, type Tier } from "../lib/store";
 import { tierTables } from "../lib/quality";
 import Studio from "./Studio";
 
@@ -15,6 +34,7 @@ const LazySkills = lazy(() => import("./views/KeycapCloud"));
 const LazyProject = lazy(() => import("./views/ProjectMini"));
 const LazyCta = lazy(() => import("./views/CtaShapes"));
 
+/** Per-view camera + studio lighting (each View brings its own). */
 function ViewBody({ children, camPos }: { children: React.ReactNode; camPos: [number, number, number] }) {
   return (
     <>
@@ -25,7 +45,7 @@ function ViewBody({ children, camPos }: { children: React.ReactNode; camPos: [nu
   );
 }
 
-/** Selector table: registry id -> DOM placeholder + scene. */
+/** Finds the DOM placeholder for a view (mounted before the canvas reads it). */
 function useSlotElement(selector: string): HTMLElement | null {
   const [el, setEl] = useState<HTMLElement | null>(null);
   useEffect(() => {
@@ -106,60 +126,88 @@ function CtaView() {
   );
 }
 
-function Views() {
-  const visibleViews = useSiteStore((s) => s.visibleViews);
-  const [version, setVersion] = useState(0);
+/** Stable view ids in priority order (hero first → wins the low-tier slot). */
+const VIEW_ORDER = [
+  "hero",
+  "experience",
+  "skills",
+  "cta",
+  "project-legal-ai",
+  "project-cloud-nova",
+  "project-certchain",
+] as const;
 
-  // Registry mutates the Set in place; re-render when its identity changes.
+const VIEW_COMPONENTS: Record<(typeof VIEW_ORDER)[number], () => ReactElement | null> = {
+  hero: HeroView,
+  experience: ExperienceView,
+  skills: SkillsView,
+  cta: CtaView,
+  "project-legal-ai": () => <ProjectView pid="legal-ai" />,
+  "project-cloud-nova": () => <ProjectView pid="cloud-nova" />,
+  "project-certchain": () => <ProjectView pid="certchain" />,
+};
+
+/**
+ * Mounts only the currently-visible registered views, capped at
+ * maxActiveViews (high = all, medium = 2, low = hero only). Off-screen views
+ * never mount, so they do zero useFrame work.
+ */
+function Views({ maxActiveViews }: { maxActiveViews: number }) {
+  const [ids, setIds] = useState<string[]>([]);
+
   useEffect(() => {
-    return useSiteStore.subscribe((s, prev) => {
-      if (s.visibleViews !== prev.visibleViews) setVersion((v) => v + 1);
-    });
+    const sync = () => {
+      const next = [...useSiteStore.getState().visibleViews];
+      setIds((prev) =>
+        prev.length === next.length && prev.every((v, i) => prev[i] === next[i]) ? prev : next
+      );
+    };
+    sync();
+    return useSiteStore.subscribe(sync);
   }, []);
-  void version;
 
-  const has = (suffix: string) => {
-    for (const id of visibleViews) {
-      if (id.endsWith(suffix) || id.includes(suffix)) return true;
-    }
-    return false;
-  };
+  const active = VIEW_ORDER.filter((id) => ids.includes(id)).slice(0, maxActiveViews);
 
   return (
     <>
-      {has("hero") && <HeroView />}
-      {has("experience") && <ExperienceView />}
-      {has("skills") && <SkillsView />}
-      {has("cta") && <CtaView />}
-      {has("certchain") && <ProjectView pid="certchain" />}
-      {has("legal-ai") && <ProjectView pid="legal-ai" />}
-      {has("cloud-nova") && <ProjectView pid="cloud-nova" />}
+      <View.Port />
+      {active.map((id) => {
+        const Cmp = VIEW_COMPONENTS[id];
+        return Cmp ? createElement(Cmp, { key: id }) : null;
+      })}
     </>
   );
 }
 
 export default function CanvasRoot() {
   const [eventRoot, setEventRoot] = useState<HTMLElement | null>(null);
-  const [runtimeStep, setRuntimeStep] = useState(0); // 0 = detected, -1 step down, etc.
   const detectedTier = useSiteStore((s) => s.detectedTier);
   const tierOverride = useSiteStore((s) => s.tierOverride);
+  const runtimeStepRef = useRef(0);
+  const [runtimeStep, setRuntimeStep] = useState(0); // 0 = detected, <0 = stepped down
+  const [locked, setLocked] = useState(false); // flip-flop fallback: lower tier for the session
+  const [hidden, setHidden] = useState(false);
 
+  // #app-root wraps the whole page (page.tsx) so R3F pointer coordinates map
+  // to real page geometry; a zero-size wrapper would deaden all 3D events.
   useEffect(() => {
-    // Defer to a task so the effect isn't a synchronous setState.
     const id = window.setTimeout(() => setEventRoot(document.getElementById("app-root")), 0);
     return () => window.clearTimeout(id);
   }, []);
 
-  const tier =
-    tierOverride !== "auto"
-      ? tierOverride
-      : runtimeStep === 0
-        ? detectedTier
-        : runtimeStep < 0
-          ? detectedTier === "high"
-            ? "medium"
-            : "low"
-          : detectedTier;
+  // Pause the frameloop entirely while the tab is hidden.
+  useEffect(() => {
+    const onVis = () => setHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  const tier: Tier = useMemo(() => {
+    if (tierOverride !== "auto") return tierOverride;
+    if (locked) return detectedTier === "high" ? "medium" : "low";
+    if (runtimeStep < 0) return detectedTier === "high" ? "medium" : "low";
+    return detectedTier;
+  }, [tierOverride, locked, runtimeStep, detectedTier]);
 
   const tables = tierTables(tier);
 
@@ -170,14 +218,18 @@ export default function CanvasRoot() {
       style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 30 }}
       gl={{ alpha: true, antialias: tables.antialias, powerPreference: "high-performance" }}
       dpr={tables.dpr}
+      frameloop={hidden ? "never" : "always"}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
+        // Context loss → simple mode after the 2 s restore grace.
         gl.domElement.addEventListener(
           "webglcontextlost",
           (e) => {
             e.preventDefault();
             window.setTimeout(() => {
-              useSiteStore.getState().set("webgl", "lost");
+              if (!useSiteStore.getState().reducedMotion) {
+                useSiteStore.getState().set("webgl", "lost");
+              }
             }, 2000);
           },
           false
@@ -185,11 +237,21 @@ export default function CanvasRoot() {
       }}
     >
       <PerformanceMonitor
-        onDecline={() => setRuntimeStep((s) => Math.max(-1, s - 1))}
-        onIncline={() => setRuntimeStep((s) => Math.min(0, s + 1))}
+        onDecline={() => {
+          runtimeStepRef.current -= 1;
+          setRuntimeStep(runtimeStepRef.current);
+        }}
+        onIncline={() => {
+          if (locked) return;
+          runtimeStepRef.current = Math.min(0, runtimeStepRef.current + 1);
+          setRuntimeStep(runtimeStepRef.current);
+        }}
+        // After 3 flip-flops, stop adapting and lock to the lower tier for the
+        // session (rather than disabling adaptation at the current tier).
         flipflops={3}
+        onFallback={() => setLocked(true)}
       />
-      <Views />
+      <Views maxActiveViews={tables.maxActiveViews} />
     </Canvas>
   );
 }

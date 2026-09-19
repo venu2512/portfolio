@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useInViewMargin } from "../../lib/hooks";
 import { useSiteStore } from "../../lib/store";
 import useViewRegistration from "../../lib/useViewRegistration";
@@ -10,7 +10,8 @@ import { skillsFilterRef } from "../../three/filterMirror";
 export default function SkillsSlot({ filter }: { filter: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const { visible } = useInViewMargin(ref);
-  const id = useId();
+  // Stable registry id — must match CanvasRoot's VIEW_ORDER selector.
+  const id = "skills";
   const webgl = useSiteStore((s) => s.webgl);
   const simpleView = useSiteStore((s) => s.simpleView);
   useViewRegistration(id, ref, visible);
