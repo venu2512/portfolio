@@ -25,7 +25,7 @@ export default function Hero() {
           <Reveal>
             <span className="pill">
               <span className="dot-live" aria-hidden="true" />
-              {profile.openTo}
+              {profile.openToShort}
             </span>
           </Reveal>
           <h1 className="h1 mt-6">

@@ -41,7 +41,7 @@ export default function AnnouncementBar() {
             scrollToSection("contact", window.matchMedia("(prefers-reduced-motion: reduce)").matches)
           }
         >
-          {profile.openTo} →
+          {profile.openToShort} →
         </button>
         <button type="button" aria-label="Dismiss announcement" onClick={dismiss}>
           ✕

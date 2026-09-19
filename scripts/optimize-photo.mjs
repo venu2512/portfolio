@@ -6,7 +6,7 @@
 //
 // Uses sharp (devDependency). Run: npm run photo (also wired to predev/prebuild).
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
@@ -20,6 +20,22 @@ const outMeta = join(root, "src", "content", "photo-meta.json");
 
 const WIDTHS = [480, 960, 1440];
 const MAX_BYTES = 200 * 1024;
+const IMAGE_RE = /\.(jpe?g|png|webp|avif|gif|tiff?)$/i;
+
+/** Orphaned AVIF/WebP/JPG outputs no longer matching a source photo. */
+function cleanOrphanGenerated() {
+  if (!existsSync(genDir)) return;
+  const keep = new Set();
+  if (existsSync(srcJpg)) keep.add("profile");
+  if (existsSync(srcCutout)) keep.add("cutout");
+  for (const f of readdirSync(genDir)) {
+    const m = f.match(/^(.+)-(?:480|960|1440)\.(?:avif|webp|jpg)$/);
+    if (m && !keep.has(m[1])) {
+      rmSync(join(genDir, f));
+      log(`Removed orphan generated image ${f}.`);
+    }
+  }
+}
 
 function log(msg) {
   console.log(`[photo] ${msg}`);
@@ -65,6 +81,7 @@ async function makeOg(photoPath) {
   </svg>`;
   const layers = [{ input: Buffer.from(svgBase), top: 0, left: 0 }];
   if (photoPath) {
+    // Pre-mask the photo buffer (rounded corners), then composite once.
     const mask = Buffer.from(
       `<svg width="360" height="360"><rect width="360" height="360" rx="64" fill="#fff"/></svg>`
     );
@@ -73,12 +90,6 @@ async function makeOg(photoPath) {
       .resize(360, 360, { fit: "cover", position: "attention" })
       .png()
       .toBuffer();
-    layers.push({ input: photo, top: 135, left: 100 });
-    layers.push({ input: mask, top: 135, left: 100, blend: "destination-in" });
-    // Composite order: mask must apply to the photo only — composite the
-    // photo through the mask by pre-masking the photo buffer instead.
-    layers.pop();
-    layers.pop();
     const masked = await sharp(photo)
       .composite([{ input: mask, blend: "destination-in" }])
       .png()
@@ -112,6 +123,7 @@ async function makeOg(photoPath) {
 
 async function main() {
   mkdirSync(genDir, { recursive: true });
+  cleanOrphanGenerated();
 
   if (!existsSync(srcJpg)) {
     log("public/profile/profile.jpg NOT FOUND — writing { hasPhoto: false } and continuing.");

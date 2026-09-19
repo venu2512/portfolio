@@ -54,10 +54,9 @@ export default function CtaBanner() {
                     Copy email
                   </button>
                 </Magnetic>
-                <a href={`mailto:${profile.email}`} className="btn btn-secondary">Email me</a>
                 <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">LinkedIn</a>
                 <a href={profile.github} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">GitHub</a>
-                <a href={profile.resumePdf} download className="btn btn-secondary">Resume</a>
+                <a href={profile.resumePdf} download className="btn btn-secondary">Download resume</a>
               </div>
             </div>
             <div className="md:col-span-2 pr-4 hidden md:block">
