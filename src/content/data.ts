@@ -1,28 +1,37 @@
 export const profile = {
   name: "Venugopal V",
   shortName: "Venu",
+  monogram: "VV",
   role: "AI/ML Engineer Intern",
-  tagline: "Building multi-agent AI systems, ML solutions, and blockchain applications.",
-  rotatingRoles: ["AI/ML Engineer Intern", "Multi-Agent Systems", "Data Science", "Blockchain"],
+  headline: "I build multi-agent AI systems.",
+  tagline:
+    "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications.",
   summary:
     "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications. Currently contributing to a production multi-agent digital workforce platform, with experience spanning AI agent implementation, LLM fine-tuning, and decentralized verification systems. Strong foundation in Python, data-driven problem-solving, and modern development tools. Actively seeking internships in Data Science, AI, and Blockchain.",
-  location: "Madurai, Tamil Nadu, India", // resume address; keep editable
+  openTo: "Internships in Data Science, AI, and Blockchain",
+  location: "Madurai, Tamil Nadu, India",
   email: "Venu25122005@gmail.com",
   phone: "+91-7010422347",
-  showPhone: false, // public site: hide phone by default
+  showPhone: false,
   linkedin: "https://linkedin.com/in/venugopal-v-61a50b3a9",
   github: "https://github.com/venu2512",
-  resumePdf: "/Venugopal_V_Resume.pdf", // copy the PDF into /public
+  resumePdf: "/Venugopal_V_Resume.pdf",
   languages: [
     { name: "Tamil", level: "Native" },
     { name: "English", level: "Professional" },
     { name: "Telugu", level: "Conversational" },
   ],
-  openTo: "Internships in Data Science, AI, and Blockchain",
+  heroChips: ["Python", "Multi-Agent Systems", "QLoRA", "Ethereum", "React.js"],
+  photo: {
+    src: "/profile/profile.jpg", // required for best result
+    cutout: "/profile/profile-cutout.png", // optional transparent PNG
+    alt: "Portrait of Venugopal V",
+    focus: { x: 0.5, y: 0.3 }, // face position, 0 = top/left, 1 = bottom/right
+  },
 };
 
 export const experience = [
-  // order: most recent first, as on the resume
+  // most recent first, as on the resume
   {
     id: "kreupai",
     org: "KreupAI Technologies LLC",
@@ -35,7 +44,6 @@ export const experience = [
       "Built out modules for the DaftarAccounting platform, including an AI Assistant, to automate and streamline accounting workflows.",
       "Partner cross-functionally on multi-agent implementation and testing to ship scalable, production-ready agent-based workflows.",
     ],
-    // 3D satellites orbiting the KreupAI monolith:
     tools: [
       "ContractParserTool",
       "ClauseExtractorTool",
@@ -106,11 +114,11 @@ export const projects = [
 ];
 
 export const skills = [
-  // each category = one constellation cluster
-  { id: "lang", label: "Languages", items: ["Python", "SQL", "Java"] },
+  { id: "lang", label: "Languages", color: "primary", items: ["Python", "SQL", "Java"] },
   {
     id: "ai",
     label: "AI / Machine Learning",
+    color: "lavender",
     items: [
       "Pandas",
       "NumPy",
@@ -122,15 +130,17 @@ export const skills = [
       "Prompt Engineering",
     ],
   },
-  { id: "viz", label: "Visualization", items: ["Power BI", "Matplotlib", "Seaborn", "Plotly"] },
+  { id: "viz", label: "Visualization", color: "blush", items: ["Power BI", "Matplotlib", "Seaborn", "Plotly"] },
   {
     id: "web",
     label: "Web Development",
+    color: "sky",
     items: ["HTML", "CSS", "MongoDB", "Express.js", "React.js", "Node.js", "REST APIs"],
   },
   {
     id: "vcs",
     label: "Version Control",
+    color: "ink",
     items: [
       "Git (branching, merging, pull requests, rebasing, conflict resolution)",
       "GitHub",
@@ -139,10 +149,22 @@ export const skills = [
   {
     id: "tools",
     label: "Tools & Platforms",
+    color: "white",
     items: ["VS Code", "Streamlit", "MetaMask", "Apache Kafka"],
   },
-  { id: "chain", label: "Blockchain", items: ["Ethereum", "Smart Contracts", "Web3.js"] },
+  {
+    id: "chain",
+    label: "Blockchain",
+    color: "cream",
+    items: ["Ethereum", "Smart Contracts", "Web3.js"],
+  },
 ];
+
+// Keycap label rule: text before " (" (e.g. "Git", "LLM Fine-Tuning"). The DOM list shows the full text.
+export function keycapLabel(item: string): string {
+  const paren = item.indexOf(" (");
+  return paren > 0 ? item.slice(0, paren) : item;
+}
 
 export const education = [
   {
@@ -158,3 +180,45 @@ export const education = [
     period: "2020 – 2023",
   },
 ];
+
+// FAQ: answers derived only from the data above (no new claims).
+export const faq = [
+  {
+    q: "What kind of roles are you looking for?",
+    a: "Internships in Data Science, AI, and Blockchain.",
+  },
+  {
+    q: "What are you working on right now?",
+    a: "As an AI/ML Engineer Intern at KreupAI Technologies LLC, I contribute to the AISA multi-agent digital workforce platform: agent logic, backend pipelines, and integration testing, including the AI Legal Contract Analyst and modules for the DaftarAccounting platform.",
+  },
+  {
+    q: "What is your technical stack?",
+    a: "Python, SQL, and Java; Pandas, NumPy, Scikit-learn, TensorFlow, and OpenCV; the MERN stack; Ethereum, smart contracts, and Web3.js; plus Power BI, Streamlit, Git, and Apache Kafka.",
+  },
+  {
+    q: "Do you have experience fine-tuning LLMs?",
+    a: "Yes. My Legal AI Chatbot fine-tunes Gemma using QLoRA for efficient, low-resource deployment.",
+  },
+  {
+    q: "Where can I see your code?",
+    a: "On GitHub at github.com/venu2512.",
+  },
+  {
+    q: "Where are you based and which languages do you speak?",
+    a: "Madurai, Tamil Nadu, India. Tamil (native), English (professional), Telugu (conversational).",
+  },
+  {
+    q: "Can I download your resume?",
+    a: "Yes, use the Download Resume button on this page.",
+  },
+];
+
+// Derived stats — computed, never hard-coded.
+export function deriveStats(): Array<{ value: number | string; label: string }> {
+  return [
+    { value: experience.length, label: "Internships" },
+    { value: projects.length, label: "Projects" },
+    { value: skills.length, label: "Skill areas" },
+    { value: 2027, label: "B.Tech graduation" },
+  ];
+}
