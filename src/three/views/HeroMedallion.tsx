@@ -34,6 +34,8 @@ const CHIP_COLORS: Record<string, string> = {
   ink: "#3A3A42",
 };
 
+const DEFAULT_CHIP_COLOR = "#FF6A13";
+
 /** heroChips → { label, color } resolved against the skills categories. */
 function useHeroChips(): Array<{ label: string; color: string }> {
   return useMemo(
@@ -41,7 +43,7 @@ function useHeroChips(): Array<{ label: string; color: string }> {
       profile.heroChips.map((label) => {
         const cat = skills.find((s) => s.items.some((i) => keycapLabel(i) === label || i === label));
         const color = CHIP_COLORS[cat?.color ?? "primary"];
-        return { label, color: color ?? CHIP_COLORS.primary };
+        return { label, color: color ?? DEFAULT_CHIP_COLOR };
       }),
     []
   );
@@ -49,8 +51,8 @@ function useHeroChips(): Array<{ label: string; color: string }> {
 
 /** Animated blob (mode B backdrop): icosphere with sin-noise vertex wobble. */
 function Blob() {
-  const geo = useMemo(() => new THREE.IcosahedronGeometry(1.35, 5), []);
-  const base = useMemo(() => Float32Array.from(geo.attributes.position.array), [geo]);
+  const meshRef = useRef<THREE.Mesh>(null);
+  const base = useRef<Float32Array | null>(null);
   const mat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
@@ -62,14 +64,17 @@ function Blob() {
     []
   );
   useFrame(({ clock }) => {
+    const mesh = meshRef.current;
+    const pos = mesh?.geometry.attributes.position;
+    if (!mesh || !pos) return;
+    // Capture the rest pose once (first frame) for the noise displacement.
+    if (!base.current) base.current = Float32Array.from(pos.array);
     const t = clock.elapsedTime;
-    const pos = geo.attributes.position;
-    if (!pos) return;
     for (let i = 0; i < pos.count; i++) {
       const ix = i * 3;
-      const nx = base[ix] ?? 0;
-      const ny = base[ix + 1] ?? 0;
-      const nz = base[ix + 2] ?? 0;
+      const nx = base.current[ix] ?? 0;
+      const ny = base.current[ix + 1] ?? 0;
+      const nz = base.current[ix + 2] ?? 0;
       const w =
         Math.sin(nx * 1.8 + t * 1.1) * 0.05 +
         Math.sin(ny * 2.2 - t * 0.9) * 0.05 +
@@ -80,7 +85,11 @@ function Blob() {
     }
     pos.needsUpdate = true;
   });
-  return <mesh geometry={geo} material={mat} scale={[1.15, 1.35, 0.9]} />;
+  return (
+    <mesh ref={meshRef} material={mat} scale={[1.15, 1.35, 0.9]}>
+      <icosahedronGeometry args={[1.35, 5]} />
+    </mesh>
+  );
 }
 
 export default function HeroMedallion() {
