@@ -1,125 +1,113 @@
-# The Neural Corridor — Venugopal V's 3D Portfolio
+# Venugopal V — Portfolio
 
-A production-ready, static-export 3D portfolio. The visitor flies a camera along a glowing rail
-through nine stations — each one a career milestone rendered in procedural Three.js geometry.
-All resume content lives in semantic, server-rendered HTML; the 3D world is progressive
-enhancement that fades in after first paint, and falls back to a polished 2D "simple view"
-whenever WebGL is missing, broken, or declined.
+A clean, bright, professional portfolio for **Venugopal V**. No 3D, no WebGL:
+big display type, generous spacing, rounded cards and soft gradients.
 
-## Quickstart
+Built with **Vite + React 18 + TypeScript (strict) + Tailwind CSS**, with
+Framer Motion (scroll reveals only) and `react-helmet-async` for SEO tags.
+Static build, deploys to Vercel as `npm run build` → `dist`.
+
+---
+
+## Run it
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # local dev server
+npm run build      # type-check + production build (must pass with zero errors)
+npm run preview    # serve the production build locally
+npm run check:ssr  # renders the whole page in Node and asserts content/SEO/contrast (137 checks)
 ```
 
-| Script | What it does |
-|---|---|
-| `npm run dev` | Dev server |
-| `npm run build` | Static export to `out/` (also type-checks) |
-| `npm run start` | Serves `out/` statically (production preview) |
-| `npm run lint` | ESLint (Next core-web-vitals + TS) |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm run analyze` | Bundle analysis (`ANALYZE=true next build`) |
+## Edit content
 
-Everything ships: `npm run lint`, `npm run typecheck`, and `npm run build` all pass with zero
-errors. Deployment output is a plain `out/` folder — no server required.
+Every word on the site comes from **`src/data/profile.ts`** — a single source
+of truth. Change a value there and the whole page follows. Do not hard-code
+copy inside components.
 
-## Editing your content
+## Change the accent colour
 
-**One file: `src/content/data.ts`.** The DOM, the JSON-LD, the metadata — everything reads from
-it. There are no invented facts; if a field is `null`, nothing renders.
+Open `src/styles/tokens.css` and edit the one variable:
 
-- **Add a project:** append to `projects` with a unique `id`, `name`, `subtitle`, `stack`,
-  `bullets`, and `repoUrl` (leave `null` to hide the repo link — all three are `null` now).
-- **Add skills:** append to the right `skills` category; the 3D constellation adds a node.
-- **Show your phone:** set `showPhone: true`. The built site contains **no phone number** while
-  it is `false` (verified in CI-style checks below).
-- **Replace the resume PDF:** `public/Venugopal_V_Resume.pdf` is currently a generated
-  placeholder (from `scripts/make-resume.mjs`). Drop in your real PDF with the same filename.
-- **Dates for QuadEdutor / Nitroware:** add a `period` string when you have them; sections
-  render no date until then. There is deliberately **no Achievements section**.
-
-Regenerate the OG image any time with `node scripts/make-og.mjs` (edit the script to restyle it).
-
-## Architecture
-
-```
-Layer 0  <Canvas>            fixed, z-0 — the 3D world (lazy, fades in after idle)
-Layer 1  <main> sections     9 semantic sections (100svh each), the scroll driver
-Layer 2  Nav / Drawer /      fixed UI: dot-rail, mobile top bar, DetailDrawer,
-         toggles             simple-view + quality-tier toggles
+```css
+:root {
+  --accent: #d9480f;
+}
 ```
 
-- **Scroll → camera:** native scroll position feeds a damped progress value (maath `damp3`)
-  along two Catmull-Rom curves (position + look-at). Waypoint *index* parametrization means
-  each 100svh section maps 1:1 to a station. Scroll-snap is `proximity`, never mandatory.
-- **Tiers:** one-time hardware probe (`src/lib/quality.ts`) → high/medium/low → dpr, particle
-  count, antialias, Bloom. drei `<PerformanceMonitor>` steps the tier down/up at runtime
-  (never above detected). Manual override in the nav persists to `localStorage`.
-- **Fallbacks:** no WebGL / context lost / scene error / Save-Data + reduced-motion → simple
-  view (CSS constellation background, always-visible cards, zero 3D code loaded). Toggle lives
-  in the nav and persists.
-- **Accessibility:** skip link, one `<h1>`, landmark nav, focus-trapped drawer
-  (`aria-modal`), keyboard section nav (`↑/↓/PageUp/PageDown/Home/End`), 2px cyan focus rings,
-  reduced-motion honored everywhere, canvas `aria-hidden`, all content reachable without JS.
-- **SEO:** every word is in the static HTML (verified), Person JSON-LD, OG/Twitter cards with
-  a real 1200×630 `og.png`, `sitemap.xml`, `robots.txt`, canonical via `NEXT_PUBLIC_SITE_URL`.
+That single knob drives the logo tile, primary buttons, section labels,
+stat 1 and the accent dots. Accent *text* and *button fills* use
+`--accent-strong`, a dark derivative computed from `--accent` with
+`color-mix(in srgb, var(--accent) 86%, #000000)` so text keeps WCAG AA
+contrast (≥ 4.5:1) on white. Because it is derived, changing `--accent` still
+recolors everything. The favicon and `og-image.png` use the literal `#D9480F`
+and need a manual update if you change the accent.
 
-## Deployment
+## Add a photo
 
-Set `NEXT_PUBLIC_SITE_URL=https://<final-domain>` in your host's environment (or `.env.local`
-for local builds — canonical/sitemap/OG URLs derive from it).
+Drop a file named `photo.jpg` (or `photo.jpeg` / `photo.png` / `photo.webp`)
+into `public/`. It is detected at **build time** (`import.meta.glob`), rendered
+`object-fit: cover` in the hero arch frame, and requested only when it exists —
+so there is never a broken image or a 404. Without a photo, the frame shows a
+`[ YOUR PHOTO ]` label. Rebuild after adding the file.
 
-### Vercel (primary)
+## Swap the resume
 
-```bash
-npm i -g vercel && vercel        # or: push the repo and import it in the dashboard
+`public/resume.pdf` is currently a small placeholder PDF so the "Download
+resume" button works. Replace it with your real resume (keep the filename).
+The button links to `/resume.pdf` with the `download` attribute.
+
+## Deploy
+
+Vercel defaults (also in `vercel.json`):
+
+- Build command: `npm run build`
+- Output directory: `dist`
+
+After deploying, update the canonical host:
+
+1. `SITE_URL` in `src/data/profile.ts`
+2. `public/robots.txt` (Sitemap line)
+3. `public/sitemap.xml`
+
+## Placeholders (clearly marked, never fabricated)
+
+| Placeholder | Where | Notes |
+| --- | --- | --- |
+| `[ YOUR PHOTO ]` | Hero arch frame | Shows until `public/photo.jpg` is added |
+| `public/resume.pdf` | "Download resume" buttons | Ships a stub PDF; swap for the real file |
+| `SITE_URL` | `src/data/profile.ts` | Fake canonical host until Vercel deploy; used for canonical, OG, robots, sitemap |
+| `og-image.png` | `public/og-image.png` | 1200×630 PNG, generated from `design/og-image.svg`; re-render or replace as desired |
+| Per-project repo/live links | Project cards | A button renders only when a `href` exists in `profile.projects[*]`; none do today (featured project links to the GitHub profile) |
+| Phone number | — | Intentionally not shown |
+
+Other spec decisions recorded in the pull request:
+
+- **Accent contrast**: the spec's `#D9480F` gives 3.94:1 as text on the page
+  and 4.30:1 behind white, both under the required 4.5:1. `--accent-strong`
+  (a `color-mix` derivative of the same knob) is used for accent text and
+  accent button fills. The raw accent stays for decorative dots and the
+  large-type stat number (56px needs only 3:1).
+- **Sticky nav**: kept translucent and sticky for usable long-page navigation
+  (was unspecified).
+- **Section labels** are written in sentence case in the markup and uppercased
+  via CSS, so screen readers announce them naturally.
+- **OG image / favicon** use font-system fallbacks and the literal accent hex.
+
+## Structure
+
 ```
-
-`vercel.json` already sets security headers and immutable caching for `/_next/static/*`.
-
-### Netlify / Cloudflare Pages
-
-Build command `npm run build`, publish directory `out`. `public/_headers` (copied into `out/`)
-carries the same headers.
-
-### GitHub Pages
-
-```bash
-GH_PAGES=true GH_PAGES_REPO=<repo-name> NEXT_PUBLIC_SITE_URL=https://<user>.github.io/<repo-name> npm run build
-# publish the out/ folder (e.g. via gh-pages branch or Actions)
+src/
+  main.tsx, App.tsx
+  data/profile.ts            # all content
+  styles/tokens.css          # --accent and friends
+  components/                # Nav, Hero, Stats, Projects, Experience,
+                             # Skills, About, Contact, Footer, Reveal
+  components/ui/             # Pill, Button, Card
+scripts/
+  ssr-check.tsx              # Node render + content/SEO/contrast assertions
+  vite.ssr.config.ts         # one-off config for check:ssr
+public/                      # favicon.svg, og-image.png, resume.pdf (stub),
+                             # robots.txt, sitemap.xml, photo.jpg (optional)
+design/og-image.svg          # source art for og-image.png
 ```
-
-`next.config.mjs` applies `basePath`/`assetPrefix` automatically when `GH_PAGES=true`.
-
-## Deployment checklist
-
-Run after every change; the first items are automated:
-
-- [x] `npm run lint && npm run typecheck && npm run build` pass; `out/` generated
-- [x] Built HTML contains all resume text (verified: name, 3 employers, 3 projects,
-      all 7 skill categories, both schools, languages)
-- [x] `Venugopal_V_Resume.pdf` present in `/public` and linked *(placeholder — replace it!)*
-- [x] Phone number absent from built output while `showPhone: false`
-- [x] Repo links render only for non-null `repoUrl` (currently none)
-- [x] sitemap.xml and robots.txt generated
-- [ ] No console errors in Chrome/Safari/Firefox desktop, Chrome Android, Safari iOS *(manual)*
-- [ ] `--disable-webgl` shows the full simple view *(manual)*
-- [ ] JS disabled: content fully readable *(manual — the export works; verify your build)*
-- [ ] Lighthouse mobile: Perf ≥ 85, A11y ≥ 95, SEO 100, Best Practices ≥ 95 *(run against the
-      deployed URL or `npm run start`)*
-- [ ] OG/Twitter preview validated (LinkedIn Post Inspector, opengraph.xyz)
-- [ ] JSON-LD validated (Rich Results Test / validator.schema.org)
-- [ ] Custom domain + HTTPS, `NEXT_PUBLIC_SITE_URL` set, canonical correct
-- [ ] Submit to Google Search Console (Bing Webmaster Tools too); link from GitHub/LinkedIn
-
-## Items that need your input
-
-1. **`repoUrl` for the three projects** in `src/content/data.ts` (GitHub links) — links appear
-   in the DetailDrawer the moment you fill them in.
-2. **Final domain** → set `NEXT_PUBLIC_SITE_URL` and update `metadataBase` fallback.
-3. **`showPhone`** — currently `false`; flip in `data.ts` to expose your number.
-4. **Real resume PDF** → replace `public/Venugopal_V_Resume.pdf`.
-5. **Search Console** → verify ownership after deploy (a `<meta name="google-site-verification">`
-   can be added to `src/app/layout.tsx` metadata once you have the token).

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!--
+    Design source for public/og-image.png.
+    Re-render with `sharp` (or open in a browser at 1200x630 and screenshot):
+      sharp(await fs.promises.readFile("design/og-image.svg"), { density: 72 })
+        .png().toFile("public/og-image.png");
+    Fonts fall back to Segoe UI / Arial if Bricolage Grotesque is not installed.
+  -->
+  <defs>
+    <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFD6BE"/>
+      <stop offset="52%" stop-color="#F4C6F5"/>
+      <stop offset="100%" stop-color="#C6D2FF"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3B2A8F"/>
+      <stop offset="100%" stop-color="#D9480F"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#F5F5F7"/>
+  <circle cx="1120" cy="40" r="270" fill="url(#hero)" opacity="0.85"/>
+  <circle cx="1010" cy="620" r="180" fill="url(#panel)" opacity="0.16"/>
+  <rect x="880" y="392" width="320" height="238" rx="32" fill="#14141A" opacity="0.04"/>
+
+  <!-- top row -->
+  <rect x="72" y="64" width="54" height="54" rx="17" fill="#D9480F"/>
+  <text x="99" y="100" text-anchor="middle" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="23" font-weight="800" fill="#FFFFFF">VV</text>
+  <text x="144" y="102" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="31" font-weight="800" letter-spacing="-0.8" fill="#14141A">Venugopal V</text>
+  <text x="1128" y="98" text-anchor="end" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="15" font-weight="700" letter-spacing="3" fill="#D9480F">AI ENGINEER</text>
+
+  <!-- headline -->
+  <text x="72" y="290" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="66" font-weight="800" letter-spacing="-2.3" fill="#14141A">AI engineer building</text>
+  <text x="72" y="364" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="66" font-weight="800" letter-spacing="-2.3" fill="#14141A">agents that do real work.</text>
+  <text x="72" y="428" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="22" font-weight="500" fill="#4A4A57">Multi-agent systems, LLM applications and full-stack products.</text>
+
+  <!-- bottom row -->
+  <g>
+    <rect x="72" y="516" width="250" height="44" rx="22" fill="#FFFFFF" stroke="#E4E4EA"/>
+    <circle cx="94" cy="538" r="5" fill="#D9480F"/>
+    <text x="110" y="544" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#14141A">Contract Analyst</text>
+  </g>
+  <g>
+    <rect x="334" y="516" width="296" height="44" rx="22" fill="#FFFFFF" stroke="#E4E4EA"/>
+    <circle cx="356" cy="538" r="5" fill="#5B3DF0"/>
+    <text x="372" y="544" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#14141A">Procurement Officer</text>
+  </g>
+  <g>
+    <rect x="642" y="516" width="230" height="44" rx="22" fill="#FFFFFF" stroke="#E4E4EA"/>
+    <circle cx="664" cy="538" r="5" fill="#1F9D55"/>
+    <text x="680" y="544" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#14141A">Payroll Agent</text>
+  </g>
+  <g>
+    <rect x="884" y="516" width="224" height="44" rx="22" fill="#FFFFFF" stroke="#E4E4EA"/>
+    <circle cx="906" cy="538" r="5" fill="#0B7BD6"/>
+    <text x="922" y="544" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="16" font-weight="600" fill="#14141A">QA Coordinator</text>
+  </g>
+  <text x="1128" y="544" text-anchor="end" font-family="Segoe UI, Arial, Helvetica, sans-serif" font-size="15" fill="#4A4A57">github.com/venu2512</text>
+</svg>

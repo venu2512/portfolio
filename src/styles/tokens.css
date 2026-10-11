@@ -1,0 +1,35 @@
+:root {
+  /* The one knob. Change --accent here and every accent element follows:
+     logo tile, primary buttons, section labels, stat 1 and the hero dot. */
+  --accent: #d9480f;
+
+  /* Accessible derivative of --accent, used wherever accent is *text* or a
+     *button fill behind white text*. The spec's #D9480F gives 3.94:1 as text on
+     the page and 4.30:1 behind white, both under the 4.5:1 target; mixing in
+     14% black lifts it to ~5.2:1 while looking the same. Derived, so the single
+     --accent knob still drives it. (First line = fallback for old browsers.) */
+  --accent-strong: #b83d0d;
+  --accent-strong: color-mix(in srgb, var(--accent) 86%, #000000);
+
+  /* Surfaces */
+  --page: #f5f5f7;
+  --card: #ffffff;
+  --line: #e4e4ea;
+
+  /* Text */
+  --ink: #14141a;
+  --muted: #4a4a57;
+  --outline: #d5d5de;
+
+  /* Support colours */
+  --violet: #5b3df0;
+  --blue: #0b7bd6;
+  --green: #1f7a45;
+  --green-dot: #1f9d55;
+
+  /* Dark feature surfaces */
+  --dark: #14141a;
+  --contact-gradient: linear-gradient(135deg, #14141a 0%, #2b1a5e 100%);
+  --hero-frame-gradient: linear-gradient(165deg, #ffd6be 0%, #f4c6f5 52%, #c6d2ff 100%);
+  --feature-panel-gradient: linear-gradient(150deg, #3b2a8f, var(--accent));
+}

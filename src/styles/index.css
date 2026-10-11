@@ -1,0 +1,105 @@
+@import "./tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-page font-body text-ink antialiased;
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+
+  /* Ordered headings + tight display defaults */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-bold text-ink;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--violet);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-content px-5 sm:px-8;
+  }
+
+  /* 96px desktop / 64px mobile section rhythm */
+  .section-y {
+    @apply py-16 md:py-24;
+  }
+
+  .label {
+    @apply font-mono text-[13px] font-medium uppercase tracking-[0.14em] text-accent-strong;
+  }
+
+  .card {
+    @apply rounded-card border border-line bg-card;
+  }
+
+  .hover-lift {
+    @apply transition-[transform,box-shadow,border-color] duration-300 ease-out;
+  }
+  .hover-lift:hover {
+    @apply -translate-y-1 border-line shadow-lift;
+  }
+
+  /* Floating agent cards in the hero */
+  .agent-float {
+    animation: agent-float 5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  @keyframes agent-float {
+    0%,
+    100% {
+      transform: translateY(-6px);
+    }
+    50% {
+      transform: translateY(6px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .agent-float {
+      animation: none;
+      transform: none;
+    }
+  }
+}
+
+/* Anchor targets clear the sticky nav */
+[id] {
+  scroll-margin-top: 96px;
+}

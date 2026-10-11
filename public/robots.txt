@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# PLACEHOLDER: update the host after the Vercel deploy (see SITE_URL in src/data/profile.ts).
+Sitemap: https://venugopal-v.vercel.app/sitemap.xml
