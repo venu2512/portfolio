@@ -1,135 +1,122 @@
-"use client";
+import { useEffect, useState } from "react";
+import { profile } from "../data/profile";
+import Button from "./ui/Button";
 
-import { useEffect, useRef, useState } from "react";
-import { useSiteStore } from "../lib/store";
-import { scrollToSection } from "../lib/scroll";
-import { useReducedMotion } from "../lib/hooks";
-import { waypoints } from "../scene/waypoints";
-import SimpleViewToggle from "./SimpleViewToggle";
+const LINKS = [
+  { label: "Projects", href: "#work" },
+  { label: "Experience", href: "#experience" },
+  { label: "Skills", href: "#skills" },
+  { label: "About", href: "#about" },
+];
 
 export default function Nav() {
-  const active = useSiteStore((s) => s.active);
-  const reduced = useReducedMotion();
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const go = (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    scrollToSection(id, reduced);
-    setMenuOpen(false);
-  };
-
-  return (
-    <>
-      {/* Desktop vertical dot rail */}
-      <nav aria-label="Sections" className="nav-rail">
-        {waypoints.map((w, i) => (
-          <a
-            key={w.id}
-            href={`#${w.id}`}
-            onClick={go(w.id)}
-            className="nav-dot"
-            aria-current={i === active ? "true" : undefined}
-          >
-            <span className="nav-label">{w.navLabel}</span>
-          </a>
-        ))}
-        <div className="mt-3 flex flex-col items-center gap-2">
-          <SimpleViewToggle compact />
-        </div>
-        <TierMenu />
-      </nav>
-
-      {/* Mobile top bar */}
-      <div className="topbar">
-        <a href="#hero" onClick={go("hero")} className="font-semibold tracking-wide">
-          Venu<span style={{ color: "#22d3ee" }}>.</span>
-        </a>
-        <div className="flex items-center gap-2">
-          <SimpleViewToggle compact />
-          <button
-            type="button"
-            className="btn px-3 py-1"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            {menuOpen ? "Close" : "Menu"}
-          </button>
-        </div>
-        {menuOpen && (
-          <nav id="mobile-menu" aria-label="Sections" className="topbar-menu">
-            {waypoints.map((w, i) => (
-              <a
-                key={w.id}
-                href={`#${w.id}`}
-                onClick={go(w.id)}
-                aria-current={i === active ? "page" : undefined}
-              >
-                {w.navLabel}
-              </a>
-            ))}
-          </nav>
-        )}
-      </div>
-    </>
-  );
-}
-
-function TierMenu() {
-  const tierOverride = useSiteStore((s) => s.tierOverride);
-  const set = useSiteStore((s) => s.set);
-  const ref = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
 
+  /* Close the mobile panel when the viewport grows past the 720px breakpoint. */
   useEffect(() => {
-    if (!open) return;
-    const onDoc = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    const mq = window.matchMedia("(min-width: 720px)");
+    const onChange = () => {
+      if (mq.matches) setOpen(false);
     };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, [open]);
-
-  const items: Array<{ v: "auto" | "high" | "medium" | "low"; label: string }> = [
-    { v: "auto", label: "Auto" },
-    { v: "high", label: "High" },
-    { v: "medium", label: "Medium" },
-    { v: "low", label: "Low" },
-  ];
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   return (
-    <div className="relative mt-3" ref={ref}>
-      <button
-        type="button"
-        className="nav-dot w-auto rounded-full px-2 py-0.5 font-mono text-[0.55rem]"
-        style={{ height: "auto" }}
-        aria-expanded={open}
-        aria-label={`Quality tier: ${tierOverride}`}
-        onClick={() => setOpen((v) => !v)}
-      >
-        {tierOverride.toUpperCase()}
-      </button>
-      {open && (
-        <div
-          className="absolute right-0 bottom-0 mb-9 w-24 rounded-md border py-1"
-          style={{ background: "rgba(7,9,20,0.97)", borderColor: "rgba(34,211,238,0.25)" }}
+    <header className="sticky top-0 z-50 border-b border-line/80 bg-page/85 backdrop-blur-md">
+      <div className="container-x flex flex-wrap items-center justify-between gap-4 py-4">
+        <a
+          href="#top"
+          className="flex items-center gap-3 rounded-xl"
+          onClick={() => setOpen(false)}
         >
-          {items.map((it) => (
-            <button
-              key={it.v}
-              type="button"
-              className="block w-full px-3 py-1.5 text-left font-mono text-[0.65rem] tracking-wider"
-              style={{ color: tierOverride === it.v ? "#f59e0b" : "#9aa7c7" }}
-              onClick={() => {
-                set("tierOverride", it.v);
-                setOpen(false);
-              }}
+          <span
+            aria-hidden="true"
+            className="grid h-9 w-9 place-items-center rounded-logo bg-accent-strong font-display text-base font-extrabold text-white"
+          >
+            VV
+          </span>
+          <span className="font-display text-2xl font-extrabold tracking-[-0.03em] text-ink">
+            Venugopal
+          </span>
+        </a>
+
+        <div className="flex items-center gap-2">
+          <nav aria-label="Primary" className="hidden min-[720px]:block">
+            <ul className="flex items-center gap-1">
+              {LINKS.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="inline-flex min-h-[44px] items-center rounded-pill px-4 text-base font-medium text-muted transition-colors duration-200 hover:text-ink"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <Button href="#contact" variant="nav" className="px-6">
+            Get in touch
+          </Button>
+
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen((value) => !value)}
+            className="grid h-11 w-11 place-items-center rounded-pill border border-outline bg-card text-ink min-[720px]:hidden"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
             >
-              {it.label}
-            </button>
-          ))}
+              {open ? (
+                <>
+                  <path d="M6 6l12 12" />
+                  <path d="M18 6L6 18" />
+                </>
+              ) : (
+                <>
+                  <path d="M4 7h16" />
+                  <path d="M4 12h16" />
+                  <path d="M4 17h16" />
+                </>
+              )}
+            </svg>
+          </button>
         </div>
-      )}
-    </div>
+
+        <div
+          id="mobile-menu"
+          hidden={!open}
+          className="w-full min-[720px]:hidden"
+        >
+          <ul className="mb-1 flex flex-col gap-1 rounded-card border border-line bg-card p-2">
+            {LINKS.map((link) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="flex min-h-[44px] items-center rounded-frame px-4 text-base font-medium text-ink hover:bg-page"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+            <li className="px-4 py-2 font-mono text-[13px] text-muted">
+              {profile.location}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
   );
 }
