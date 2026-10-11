@@ -4,7 +4,7 @@ import Reveal from "./Reveal";
 export default function About() {
   return (
     <section id="about" className="section-y">
-      <div className="container-x grid gap-12 lg:grid-cols-2">
+      <div className="container-x grid gap-12 min-[900px]:grid-cols-2">
         <Reveal>
           <p className="label">About</p>
           <h2 className="mt-4 text-[32px] md:text-h3">{profile.about.heading}</h2>

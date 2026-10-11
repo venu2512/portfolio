@@ -20,7 +20,7 @@ export default function Projects() {
 
         {/* Featured project - dark card with the agent chip panel */}
         <Reveal className="mt-12">
-          <article className="overflow-hidden rounded-card-xl bg-dark text-white md:grid md:grid-cols-[1.1fr_1fr]">
+          <article className="overflow-hidden rounded-card-xl bg-dark text-white min-[900px]:grid min-[900px]:grid-cols-[1.1fr_1fr]">
             <div className="p-7 md:p-12">
               <p className="font-mono text-[13px] font-medium uppercase tracking-[0.14em] text-dark-eyebrow">
                 {featuredProject.eyebrow}
@@ -32,7 +32,7 @@ export default function Projects() {
                 {featuredProject.text}
               </p>
 
-              <ul className="mt-6 hidden flex-wrap gap-2 md:flex">
+              <ul className="mt-6 hidden flex-wrap gap-2 min-[900px]:flex">
                 {featuredProject.stack.map((item) => (
                   <li
                     key={item}
@@ -43,7 +43,7 @@ export default function Projects() {
                 ))}
               </ul>
 
-              <p className="mt-6 font-mono text-[13px] text-dark-text md:hidden">
+              <p className="mt-6 font-mono text-[13px] text-dark-text min-[900px]:hidden">
                 {featuredProject.stack.join(" · ")}
               </p>
 
@@ -60,7 +60,7 @@ export default function Projects() {
 
             <div
               aria-hidden="true"
-              className="hidden min-h-[340px] items-center justify-center p-10 md:flex"
+              className="hidden min-h-[340px] items-center justify-center p-10 min-[900px]:flex"
               style={{ background: "var(--feature-panel-gradient)" }}
             >
               <ul className="flex flex-wrap items-center justify-center gap-3">

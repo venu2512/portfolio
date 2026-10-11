@@ -48,7 +48,7 @@ function PhotoSlot() {
 export default function Hero() {
   return (
     <section id="top" className="pt-10 md:pt-16">
-      <div className="container-x grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+      <div className="container-x grid items-center gap-14 min-[900px]:grid-cols-[1.05fr_0.95fr]">
         {/* Left: the message */}
         <div>
           <Pill dot="#1F9D55">{profile.status}</Pill>
