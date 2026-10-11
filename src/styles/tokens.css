@@ -31,5 +31,5 @@
   --dark: #14141a;
   --contact-gradient: linear-gradient(135deg, #14141a 0%, #2b1a5e 100%);
   --hero-frame-gradient: linear-gradient(165deg, #ffd6be 0%, #f4c6f5 52%, #c6d2ff 100%);
-  --feature-panel-gradient: linear-gradient(150deg, #3b2a8f, #d9480f);
+  --feature-panel-gradient: linear-gradient(150deg, #3b2a8f, var(--accent));
 }
