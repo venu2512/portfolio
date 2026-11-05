@@ -1,0 +1,105 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "meta": {
+    "name": "Venugopal V — portfolio tokens",
+    "sourceOfTruth": "src/app/globals.css (:root and [data-theme=\"dark\"])",
+    "themeModel": "light-first with a dark theme (the reference site has no dark mode — this is a deliberate extra)",
+    "accentPolicy": "exactly one accent (--primary) on CTAs, focus, active nav and one hero detail (.accent-dot)",
+    "typography": "Plus Jakarta Sans (UI/body) + JetBrains Mono (labels, captions)",
+    "shape": "one card radius (20px) + pills; 1px hairlines; warm layered shadows",
+    "referenceComparison": "docs/reference/metamask-reference-tokens.json + PORTFOLIO-BLUEPRINT.md §3 (side-by-side with intentional differences)",
+    "evidenceLegend": {
+      "REPO": "value already present in this repository (globals.css / package.json / data.ts)",
+      "DERIVED": "calculated for this blueprint from repo values plus the teardown measurements",
+      "INTENTIONAL-DIFF": "differs from the MetaMask reference on purpose"
+    }
+  },
+  "color": {
+    "bg": { "light": "#fcf9f4", "dark": "#0e0e11", "role": "page ground", "evidence": "REPO", "note": "INTENTIONAL-DIFF: careful for the reference's pure #ffffff" },
+    "surface": { "light": "#ffffff", "dark": "#17171c", "role": "cards, sheets, inputs", "evidence": "REPO" },
+    "surface2": { "light": "#f5f0e9", "dark": "#1f1f26", "role": "soft fills, chips", "evidence": "REPO" },
+    "ink": { "light": "#15151a", "dark": "#f4f2ee", "role": "primary text", "evidence": "REPO" },
+    "muted": { "light": "#6f6e78", "dark": "#a0a0ab", "role": "secondary text, meta", "evidence": "REPO" },
+    "line": { "light": "rgba(21,21,26,.09)", "dark": "rgba(255,255,255,.1)", "role": "hairline borders, dividers", "evidence": "REPO" },
+    "primary": { "light": "#f6851b", "dark": "#ff8c3a", "role": "the single accent: CTAs, focus ring, active nav, .accent, .accent-dot", "evidence": "REPO", "risk": "sits in the same orange family as the reference brand mark — shift hue/lightness if more distance is wanted" },
+    "primaryInk": { "light": "#ffffff", "dark": "#1a1208", "role": "text on accent", "evidence": "REPO" },
+    "primarySoft": { "light": "#ffe6cf", "dark": "#3a2314", "role": "accent wash, hover tint", "evidence": "REPO" },
+    "pastels": {
+      "lavender": { "light": "#e4dbff", "role": "AI / Machine Learning" },
+      "blush": { "light": "#ffdde6", "role": "Visualization" },
+      "sky": { "light": "#d5e9ff", "role": "Web Development" },
+      "cream": { "light": "#fff3d6", "role": "Tools & Platforms" },
+      "evidence": "REPO",
+      "note": "INTENTIONAL-DIFF: same technique as the reference's pastel tile grounds, own hues; mapped through Tailwind @theme so they are real utilities"
+    },
+    "navy": { "light": "#171033", "dark": "#14102e", "role": "the one loud ground (Experience current role + Contact band)", "evidence": "REPO", "note": "INTENTIONAL-DIFF: own navy instead of the reference's #190066" },
+    "navyInk": { "light": "#f1eeff", "dark": "#eeeaff", "role": "text on navy", "evidence": "REPO" },
+    "navyMuted": { "light": "rgba(241,238,255,.62)", "dark": "rgba(238,234,255,.6)", "role": "secondary text on navy", "evidence": "REPO" },
+    "green": { "light": "#22c55e", "dark": "#4ade80", "role": "status dot only (no success metrics)", "evidence": "REPO" }
+  },
+  "typography": {
+    "families": {
+      "sans": { "value": "\"Plus Jakarta Sans\", ui-sans-serif, system-ui, sans-serif", "evidence": "REPO", "weights": [400, 500, 700, 800], "source": "@fontsource/plus-jakarta-sans 5.3.0 (self-hosted, no CDN request)" },
+      "mono": { "value": "\"JetBrains Mono\", ui-monospace, monospace", "evidence": "REPO", "use": "mono-label captions, stat derivation notes, stack chips, 3D labels", "source": "@fontsource/jetbrains-mono 5.3.0" }
+    },
+    "scale": {
+      "h1": { "value": "clamp(3.2rem, 7.5vw, 6.5rem) ≈ 51–104px, line-height 1, letter-spacing -0.045em, weight 800", "evidence": "REPO", "note": "INTENTIONAL-DIFF: capped below the reference's 120px hero so a four-word name never eats the fold" },
+      "h2": { "value": "clamp(2.2rem, 4.6vw, 3.9rem) ≈ 35–62px, line-height 1.04, letter-spacing -0.035em, weight 800", "evidence": "REPO" },
+      "body": { "value": "16px (browser default rem base), lead paragraphs 18px, line-height 1.6", "evidence": "REPO", "note": "INTENTIONAL-DIFF: the reference runs a 24px desktop body base" },
+      "monoLabel": { "value": "0.68rem / letter-spacing 0.16em / uppercase / --muted", "evidence": "REPO" },
+      "accentWord": { "value": ".accent { font-style: italic; color: var(--primary); font-weight: 800 }", "evidence": "REPO", "note": "reproduces the reference's one-emphasised-word gesture with a static webfont" },
+      "accentDot": { "value": "0.55em square, radius 3px, margin-left 0.18em", "evidence": "REPO", "note": "own signature; the reference uses a variable-font axis instead" }
+    }
+  },
+  "layout": {
+    "wrap": { "value": "max-width 72rem (1152px), margin-inline auto, padding-inline 1.5rem (<768px) / 2.5rem (>=768px)", "evidence": "REPO", "note": "INTENTIONAL-DIFF: narrower than the reference's 1920px container; satisfies the archive's >=24px mobile padding rule" },
+    "sectionRhythm": { "value": "CURRENT: padding-block 3rem (48px). TARGET: clamp(4.5rem, 10vw, 8.75rem) (72–140px)", "evidence": "DERIVED", "note": "P0 fix — the archive's measured median section step is 96px and under ~64px two sections read as one block" },
+    "grid": { "value": "12-column Tailwind grid via gap utilities; capability block 2×2 (md:grid-cols-2), projects 2-up with one full-width card, proof strip 4-up desktop / 2-up tablet / 1-up mobile", "evidence": "DERIVED" },
+    "heroFold": { "value": "min-height 100svh with content centred; nav + eyebrow + h1 + supporting line + 2 CTAs + medallion must fit at 1280×800 and 390×844", "evidence": "REPO + DERIVED" },
+    "touchTargets": { "value": "min-height 44px on .btn, 44px icon buttons", "evidence": "REPO" }
+  },
+  "shape": {
+    "radiusCard": { "value": "20px (--radius-card)", "evidence": "REPO", "note": "INTENTIONAL-DIFF: the reference uses 40px bento tiles + 12px blocks; one radius keeps the system legible at portfolio scale" },
+    "radiusPill": { "value": "999px (buttons, chips, announcement)", "evidence": "REPO" },
+    "radiusAccentSquare": { "value": "3px", "evidence": "REPO" },
+    "border": { "value": "1px solid var(--line)", "evidence": "REPO" },
+    "shadows": {
+      "card": { "value": "0 1px 2px rgba(21,21,26,.04), 0 10px 30px -12px rgba(21,21,26,.18), 0 30px 60px -30px rgba(21,21,26,.14)", "evidence": "REPO" },
+      "pop": { "value": "0 4px 10px -2px rgba(21,21,26,.08), 0 18px 40px -12px rgba(21,21,26,.24)", "evidence": "REPO" },
+      "accentHover": { "value": "0 10px 30px -8px rgba(246,133,27,.55)", "evidence": "REPO" },
+      "note": "INTENTIONAL-DIFF: warm-neutral layered lifts instead of the reference's 0 24px 30px rgba(0,0,0,.1)"
+    },
+    "focusRing": { "value": "2px solid var(--primary) with offset", "evidence": "REPO" }
+  },
+  "motion": {
+    "spring": { "value": "cubic-bezier(0.4, 1.35, 0.5, 0.97)", "evidence": "REPO" },
+    "reveal": { "value": "500ms opacity + translateY(14px→0), stagger 90ms, gated behind html.enhanced (no-JS shows everything)", "evidence": "REPO" },
+    "heroLineMask": { "value": "700ms translateY(110%→0), stagger 120ms", "evidence": "REPO" },
+    "buttonHover": { "value": "300ms transform translateY(-2px) + shadow", "evidence": "REPO" },
+    "magnetic": { "value": "≤6px pointer pull, pointer:fine only", "evidence": "REPO" },
+    "cardsTilt": { "value": "≤6deg, pointer:fine only", "evidence": "REPO" },
+    "marquee": { "value": "40s linear loop, pause on hover, static on reduced motion", "evidence": "REPO" },
+    "dropdown": { "value": "150ms opacity + translateY(-8px→0) (no close delay, unlike the reference's 1s)", "evidence": "DERIVED" },
+    "medallion": { "value": "spring-rotated toward the pointer, ≤18deg, returns to a calm 3/4 pose", "evidence": "DERIVED (concept)" },
+    "motionDial": { "value": "planned --motion: 1 / 0 multiplier covering every duration above", "evidence": "DERIVED" },
+    "reducedMotion": { "value": "no transforms, no masks, no count-ups, no marquee, no 3D tracking, native scroll; content always visible", "evidence": "REPO + DERIVED" },
+    "smoothScroll": { "value": "Lenis 1.3.26, fine pointers only, scroll-margin/scrollTo offset -80px", "evidence": "REPO" }
+  },
+  "threeD": {
+    "canvas": { "value": "one shared lazy <Canvas> (ssr:false) with drei <View> per slot; z-index 30; pointer-events none", "evidence": "REPO" },
+    "tiers": { "value": "high/medium/low from src/lib/quality.ts; max active views 1 (low) / 2 (medium); DPR + shadow + material swap per tier", "evidence": "REPO" },
+    "slots": [
+      { "id": "hero", "concept": "cursor-following photo medallion (portrait cutout + rim chit)", "fallback": "framed portrait + 5 hero chips (heroChips); monogram badge when hasPhoto is false" },
+      { "id": "experience", "concept": "role stage with three calm plates, no beacon", "fallback": "DOM experience cards" },
+      { "id": "skills", "concept": "draggable keycap cloud mirroring the filter chips", "fallback": "chip grid with working filters" },
+      { "id": "project-<id>", "concept": "one procedural mini-object per project (no logos or third-party marks)", "fallback": "flat illustration + stack chips" },
+      { "id": "cta", "concept": "small matte ring echoing the medallion", "fallback": "none needed" }
+    ],
+    "hardRules": { "value": ["no postprocessing/bloom", "no OrbitControls", "no textures above 1024px", "canvas aria-hidden", "all 3D off under prefers-reduced-motion or Save-Data"], "evidence": "REPO" }
+  },
+  "governance": {
+    "contentSource": { "value": "src/content/data.ts only — the DOM, JSON-LD and metadata all read from it", "evidence": "REPO" },
+    "noFabrication": { "value": "no phone number while showPhone:false; no invented metrics, dates, awards or testimonials; null dates render nothing", "evidence": "REPO" },
+    "claimHonesty": { "value": "every derived stat carries a mono-label caption stating its derivation; qualified claims never appear without a visible qualifier", "evidence": "DERIVED (from the reference's footnote pattern)" }
+  }
+}

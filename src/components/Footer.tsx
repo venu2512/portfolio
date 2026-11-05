@@ -4,12 +4,19 @@ import { profile } from "../content/data";
 import { scrollToSection } from "../lib/scroll";
 import ThreeDToggle from "./ThreeDToggle";
 
-const LINKS = ["about", "experience", "skills", "projects", "education", "faq", "contact"];
+const LINKS = ["about", "roles", "experience", "skills", "projects", "education", "faq", "contact"];
+
+// Display label per section id; `roles` keeps its id (and every existing
+// #roles link) but is labelled "Interests" to match the section heading.
+const LABELS: Record<string, string> = { roles: "Interests" };
 
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
     <footer className="wrap pb-10 pt-4">
+      {/* Landmark name read from the reference teardown (§8): the footer opens
+          with a visually hidden heading so the <footer> landmark is announced. */}
+      <h2 className="sr-only">Site footer</h2>
       <div
         className="flex flex-col md:flex-row items-center justify-between gap-6 py-8"
         style={{ borderTop: "1px solid var(--line)" }}
@@ -40,7 +47,7 @@ export default function Footer() {
               style={{ color: "var(--muted)" }}
               className="capitalize hover:opacity-70"
             >
-              {l}
+              {LABELS[l] ?? l}
             </a>
           ))}
         </nav>
@@ -61,7 +68,8 @@ export default function Footer() {
         </div>
       </div>
       <p className="text-center text-xs mt-6" style={{ color: "var(--muted)" }}>
-        Built with Next.js and Three.js · © {year} Venugopal V
+        Built with Next.js, React Three Fiber and Three.js · © {year} Venugopal V · every number on
+        this page is countable from the résumé data in the source
       </p>
     </footer>
   );

@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { profile } from "../content/data";
 import { scrollToSection } from "../lib/scroll";
 
+/**
+ * Availability strip. Restyled from a black band to a surface strip with a
+ * mono label (teardown §2 row 0 puts the claim and its label first), while
+ * keeping the top-of-page position: a floating bottom pill would collide with
+ * the toast (bottom-centre) and the back-to-top button (bottom-right).
+ */
 export default function AnnouncementBar() {
   const [hidden, setHidden] = useState(true);
 
@@ -33,17 +39,18 @@ export default function AnnouncementBar() {
 
   return (
     <div className="announce">
-      <div className="wrap flex items-center justify-between gap-3 py-2">
+      <div className="wrap flex items-center gap-3 py-2">
+        <span className="mono-label shrink-0">Open to work</span>
         <button
           type="button"
-          className="underline underline-offset-2 text-left"
+          className="announce-link text-left flex-1"
           onClick={() =>
             scrollToSection("contact", window.matchMedia("(prefers-reduced-motion: reduce)").matches)
           }
         >
           {profile.openToShort} →
         </button>
-        <button type="button" aria-label="Dismiss announcement" onClick={dismiss}>
+        <button type="button" className="announce-close" aria-label="Dismiss announcement" onClick={dismiss}>
           ✕
         </button>
       </div>

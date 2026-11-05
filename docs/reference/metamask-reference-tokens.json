@@ -1,0 +1,153 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "meta": {
+    "name": "metamask.io reference tokens (teardown evidence)",
+    "source": "https://metamask.io/",
+    "capturedAt": "2026-09-20",
+    "viewport": "1440x900, DPR 1, Chrome 153 headless (CDP)",
+    "purpose": "Reference measurements only. Nothing here may be copied as an asset, string or code.",
+    "evidenceLegend": {
+      "VERIFIED": "read from computed styles, DOM, the site's own CSS custom properties, network asset URLs, or the bundled JS",
+      "INFERRED": "calculated or judged, not read from the site"
+    },
+    "screenshots": [
+      "docs/reference/mm-360.png (360x14241)",
+      "docs/reference/mm-768.png (768x14552)",
+      "docs/reference/mm-1024.png (1024x15553)",
+      "docs/reference/mm-1440.png (1440x14495)"
+    ]
+  },
+  "base": {
+    "rootFontSize": { "value": "10px", "evidence": "VERIFIED", "note": "html{font-size:10px}; all rem values are therefore x10 px" },
+    "bodyFontSize": { "value": "2rem (mobile) / 2.4rem (>=768px)", "evidence": "VERIFIED" },
+    "bodyLineHeight": { "value": "1.5", "evidence": "VERIFIED" },
+    "containerMaxWidth": { "value": "1920px (var(--site-container-max-width), applied at >=1025px)", "evidence": "VERIFIED", "note": "effective content box at 1440 viewport measured 1377px = 1425 - 2*24px" },
+    "gutter": { "value": "24px each side", "evidence": "VERIFIED" },
+    "breakpoints": { "value": ["500px", "768px", "1025px", "1920px", "2200px", "2800px"], "evidence": "VERIFIED", "note": "rule counts: min-width:1025 845, min-width:768 814, max-width:767 91" },
+    "motionSwitch": { "value": "--motion: 1 (default) -> 0 under prefers-reduced-motion: reduce", "evidence": "VERIFIED", "note": "every duration is calc(var(--motion) * speed)" },
+    "darkMode": { "value": "none", "evidence": "VERIFIED", "note": "prefers-color-scheme: dark emulation changed nothing; color-scheme:normal; no toggle in DOM" }
+  },
+  "color": {
+    "general-black": { "value": "#0a0a0a", "evidence": "VERIFIED", "use": "body text, primary button background, footer" },
+    "general-black-light": { "value": "#242628", "evidence": "VERIFIED", "use": "secondary ink" },
+    "general-black-mid": { "value": "#1b1b1b", "evidence": "VERIFIED", "use": "dark surface" },
+    "general-white": { "value": "#ffffff", "evidence": "VERIFIED", "use": "page background, primary button text, theme-color" },
+    "general-white-off": { "value": ["#f3f5f9", "#f7f9fc"], "evidence": "VERIFIED", "note": "two definitions exist in the bundle" },
+    "general-gray": { "value": "#c8ceda", "evidence": "VERIFIED", "use": "dividers, disabled" },
+    "general-gray-light": { "value": "#e9edf6", "evidence": "VERIFIED", "use": "default block fill" },
+    "general-gray-mid": { "value": "#a1a8b7", "evidence": "VERIFIED", "use": "muted text" },
+    "general-gray-dark": { "value": "#393d46", "evidence": "VERIFIED", "use": "small print on pastel tiles" },
+    "consumer-orange": { "value": "#ff5c16", "evidence": "VERIFIED", "use": "brand accent" },
+    "consumer-orange-light": { "value": "#ffa680", "evidence": "VERIFIED", "use": "security section ground; RWA tile" },
+    "consumer-orange-dark": { "value": "#661800", "evidence": "VERIFIED", "use": "ink on orange tiles" },
+    "consumer-green": { "value": "#baf24a", "evidence": "VERIFIED", "use": "accent" },
+    "consumer-green-light": { "value": "#e5ffc3", "evidence": "VERIFIED", "use": "pastel tile fill" },
+    "consumer-green-dark": { "value": "#013330", "evidence": "VERIFIED", "use": "dark tile fill" },
+    "consumer-blue": { "value": "#89b0ff", "evidence": "VERIFIED", "use": "tile fill" },
+    "consumer-blue-light": { "value": "#cce7ff", "evidence": "VERIFIED", "use": "heading on dark ground, tile fill" },
+    "consumer-blue-dark": { "value": "#190066", "evidence": "VERIFIED", "use": "money section ground (#190066 measured on the bento-reveal section)" },
+    "consumer-purple": { "value": "#d075ff", "evidence": "VERIFIED", "use": "accent" },
+    "consumer-purple-light": { "value": "#eac2ff", "evidence": "VERIFIED", "use": "pastel tile fill" },
+    "consumer-purple-dark": { "value": "#3d065f", "evidence": "VERIFIED", "use": "tile ink / fill" },
+    "deviceFrame": { "value": "#121416", "evidence": "VERIFIED", "use": "phone mock background" },
+    "sectionGroundSequence": { "value": ["#ffffff (video)", "#190066", "#ffa680", "#ffffff", "#ffffff"], "evidence": "VERIFIED", "use": "the site's real mode switch, in page order" },
+    "selection": { "value": "background var(--background-selection, #0a0a0a), color var(--color-selection, #ffffff), re-themed per block", "evidence": "VERIFIED" }
+  },
+  "typography": {
+    "families": {
+      "body": { "value": "MMEuclidCircularB", "evidence": "VERIFIED", "loading": "self-hosted woff2, font-display:swap, metric-matched fallback faces" },
+      "ui": { "value": "MMSansVariable", "evidence": "VERIFIED" },
+      "mono": { "value": "MMSansMono", "evidence": "VERIFIED", "use": "developer nav cards, labels" },
+      "display": { "value": "MMPolyVariable (axes 'RESO' and 'wdth')", "evidence": "VERIFIED", "use": "all display headings; per-locale fallbacks DelaGothicOne / GasoekOne / NeilBold / HarmonyOS" },
+      "localeSubsets": { "value": ["NotoSansVariableZH", "NotoSansVariableJP", "NotoSansVariableRU", "MPlusCode", "NotoSansMono"], "evidence": "VERIFIED" }
+    },
+    "scale": {
+      "type-display-xxl": { "value": "6.4rem / 16rem, line-height 100%", "evidence": "VERIFIED", "letterSpacing": "-0.06rem / -0.096rem" },
+      "type-display-xl": { "value": "5.6rem / 12.8rem, 100%", "evidence": "VERIFIED", "letterSpacing": "-0.048rem / -0.076rem" },
+      "type-display-l": { "value": "4.8rem / 10.4rem, 100%", "evidence": "VERIFIED", "note": "used by section headlines ('Trade anything' measured 104px)" },
+      "type-display-m": { "value": "3.2rem / 6.4rem, 100%", "evidence": "VERIFIED" },
+      "type-display-s": { "value": "2.4rem / 5.6rem, 100%", "evidence": "VERIFIED" },
+      "type-heading-xl": { "value": "4.8rem / 7.6rem, line-height 116.667% / 110.526%", "evidence": "VERIFIED" },
+      "type-heading-l": { "value": "3.8rem / 6rem, 126.316% / 113.333%", "evidence": "VERIFIED" },
+      "type-heading-ml": { "value": "3.2rem / 4.8rem, 125% / 116.667%", "evidence": "VERIFIED" },
+      "type-heading-m": { "value": "2.4rem / 4rem, 133.333% / 120%", "evidence": "VERIFIED" },
+      "type-heading-sm": { "value": "2.0rem / 3.2rem, 140% / 125%", "evidence": "VERIFIED", "note": "tile titles measured 24px at 1440" },
+      "type-heading-xs": { "value": "1.6rem / 2.0rem, 166.667% / 140%", "evidence": "VERIFIED" },
+      "type-label": { "value": "1.2rem / 1.6rem", "evidence": "VERIFIED" },
+      "type-label-caption": { "value": "1.2rem, line-height 166.667% / 150%", "evidence": "VERIFIED", "use": "banner label + title" },
+      "type-label-eyebrow": { "value": "1.6rem, 150%", "evidence": "VERIFIED", "use": "nav button labels" }
+    },
+    "measured": {
+      "heroH1": { "value": "120px / 120px, weight 400, centered, 3 lines in a 1132x360 box", "evidence": "VERIFIED" },
+      "heroH1Mobile": { "value": "39px / 39px at 390px viewport", "evidence": "VERIFIED" },
+      "sectionH2": { "value": "104px / 104px", "evidence": "VERIFIED" },
+      "tileTitle": { "value": "24px", "evidence": "VERIFIED" },
+      "statCardTitle": { "value": "24px", "evidence": "VERIFIED" },
+      "educationH3": { "value": "48px, color #190066", "evidence": "VERIFIED" },
+      "bannerText": { "value": "12px", "evidence": "VERIFIED" }
+    },
+    "emphasisTechnique": { "value": "one element inside a display heading carries the accent, via a variable-font axis (font-variation-settings 'RESO' 5, 'wdth' 20) rather than italics", "evidence": "VERIFIED" }
+  },
+  "spacing": {
+    "baseUnit": { "value": "10px (1rem)", "evidence": "VERIFIED" },
+    "gridRhythm": { "value": "22px", "evidence": "VERIFIED", "note": "block-grid padding and gap" },
+    "statCardGap": { "value": "12px", "evidence": "VERIFIED" },
+    "bentoRowGap": { "value": "16px", "evidence": "VERIFIED", "note": "tile rows at y=972 and y=1358 with 370px height" },
+    "pinnedSectionHeights": { "value": { "hero": "6300px for a 900px sticky child", "bentoReveal": "2700px for 900px", "security": "2700px (sticky wrapper 900px + sticky-bento 1800px with padding-top:900px)" }, "evidence": "VERIFIED" },
+    "unpinnedGrid": { "value": "1631px total, padding 22px, two 679.5px columns", "evidence": "VERIFIED" }
+  },
+  "shape": {
+    "radiusHistogram": { "value": { "4px": 34, "50%": 29, "12px": 21, "8px": 15, "16px": 14, "100px|999px|9999px": 23, "18px": 8, "32px": 6, "40px": 5, "20px": 5, "11px": 5, "7px": 5 }, "evidence": "VERIFIED", "use": "4px nav buttons; 12px cards/blocks; 40px bento tiles; 32px phone mock; pill=100px" },
+    "border": { "value": "1px hairline in the gray family; colour-blocked tiles use no border", "evidence": "VERIFIED" },
+    "shadows": {
+      "lift": { "value": "0 2.4rem 3rem 0 rgba(0,0,0,.1)", "evidence": "VERIFIED", "occurrences": 6 },
+      "device": { "value": "2.3rem 3.75rem 5.2rem 0 rgba(0,0,0,.15)", "evidence": "VERIFIED", "occurrences": 2 },
+      "multiStop": { "value": "5-stop layered elevation, largest offset 31.2rem", "evidence": "VERIFIED" },
+      "ring": { "value": "inset 0 0 0 1px var(--button-color-hover)", "evidence": "VERIFIED" }
+    },
+    "maskTrick": { "value": "buttons carry mask-image: radial-gradient(white,black)", "evidence": "VERIFIED" }
+  },
+  "components": {
+    "navButton": { "value": { "padding": "10px 20px 11px", "radius": "4px", "maxHeight": "45px", "fontSize": "16px", "transition": "color 0.229s ease-out, background-color 0.229s ease-out" }, "evidence": "VERIFIED" },
+    "primaryButton": { "value": { "radius": "100px", "background": "#0a0a0a", "color": "#ffffff", "hover": "inverted (white bg, black text)", "measured": "155x42 (header), 155x42 (hero), 24px label" }, "evidence": "VERIFIED" },
+    "tile": { "value": { "size": "347x370 (hero/trade), 347x378 (money), 347x369 (security)", "radius": "40px", "padding": "0", "transition": "aspect-ratio 0.95s linear(spring)" }, "evidence": "VERIFIED" },
+    "statCard": { "value": { "size": "336.25x462", "radius": "12px", "gap": "12px", "title": "24px", "links": "/download, /security" }, "evidence": "VERIFIED" },
+    "block": { "value": { "radius": "12px", "gridColumn": "span 1 or 1/-1", "widths": "1381px full / 680px half" }, "evidence": "VERIFIED" },
+    "banner": { "value": { "holder": "white, radius 12px", "inner": "padding 10px 12px 0", "height": "38px", "label": "type-label-caption 12px medium", "close": "updates-bar_close element present" }, "evidence": "VERIFIED" },
+    "emailForm": { "value": { "input": "type=email placeholder='Email address'", "submit": "type=submit labelled SUBSCRIBE", "checkboxes": 2, "consent": "sentence + Privacy Notice link at 12px" }, "evidence": "VERIFIED" },
+    "faqAccordion": { "value": { "control": "button aria-expanded=false/true", "panel": "display:none + aria-hidden=true + inert while closed", "technique": "not <details>" }, "evidence": "VERIFIED on /money" },
+    "megaMenu": { "value": { "panel": "1377x778 at x=24,y=97", "leftCards": "940x740", "rightRail": "333x740 (283x339 + 283x169)", "open": "opacity .15s + translateY(-15px->0) .15s linear(spring)", "close": "0.2s with 1s delay" }, "evidence": "VERIFIED" },
+    "phoneMock": { "value": { "size": "358x758", "radius": "32px", "background": "#121416", "content": "Lottie animation 342x741" }, "evidence": "VERIFIED" }
+  },
+  "motion": {
+    "headerEntrance": { "value": "translate 1.235s cubic-bezier(0.58,0.02,0.03,0.98)", "evidence": "VERIFIED spec / trigger UNVERIFIED" },
+    "menuSpring": { "value": "linear(0 0%, 0.007 1.05%, 0.03 2.1%, 0.12 ...%) over 0.15s", "evidence": "VERIFIED" },
+    "tileSpring": { "value": "aspect-ratio 0.95s linear(0 0%, 0.007 1.05%, 0.03 2.1%, 0.12 ...%)", "evidence": "VERIFIED" },
+    "smoothScroll": { "value": "Lenis (html class list contains 'lenis'); html{scroll-behavior:smooth}", "evidence": "VERIFIED" },
+    "scrollLinked": { "value": "GSAP + ScrollTrigger bundled (14 + 2 hits) driving sticky sections and --variable-font-reso", "evidence": "VERIFIED bundled / INFERRED mapping" },
+    "lottie": { "value": "lottie-web bundled in 3 chunks (96 hits); animations in loader, hero phone, money phone, security phone, globe-animation 412x412", "evidence": "VERIFIED" },
+    "webgl": { "value": "three.js bundled: WebGLRenderer, ShaderMaterial, PerspectiveCamera, MeshPhysicalMaterial, GLTFLoader (26), DRACOLoader (7); one 1425x900 WebGL2 canvas in the money bento", "evidence": "VERIFIED bundled / scene content UNVERIFIED" },
+    "pointerReactive": { "value": "mousemove listeners in 6 chunks, one driving animated {x,y} state from clientX/clientY", "evidence": "VERIFIED code exists / target UNVERIFIED" },
+    "reducedMotion": { "value": "one global --motion switch plus scroll-behavior:auto and a pinned variable-font reveal; the hero background video still autoplays (paused=false, 1.16s -> 2.72s)", "evidence": "VERIFIED", "note": "video is NOT covered by the switch" },
+    "heroVideo": { "value": { "attrs": "autoplay muted loop playsinline preload=metadata", "poster": "/assets/video/home-1920-cover.jpg", "sources": ["video/webm home.webm", "video/mp4 home.mp4"], "box": "1425x900 object-fit:cover" }, "evidence": "VERIFIED" }
+  },
+  "performance": {
+    "framework": { "value": "Next.js App Router (app/[locale]/...), React, CSS Modules, nonce-based CSP", "evidence": "VERIFIED" },
+    "cms": { "value": "Contentful (images.ctfassets.net/clixtyxoaeas, sys.id records)", "evidence": "VERIFIED" },
+    "css": { "value": "21 stylesheets, ~829KB unminified combined", "evidence": "VERIFIED" },
+    "js": { "value": "25 homepage chunks ~3.8MB, 52 script tags, 268KB inline script", "evidence": "VERIFIED" },
+    "images": { "value": "?w=1920&q=75&fm=avif + loading=lazy + sizes, but 25 PNG / 11 SVG actually delivered on the homepage", "evidence": "VERIFIED" },
+    "thirdParty": { "value": ["GTM-M67JQ84", "GA4 G-V74KQYX56N", "Google Ads x2", "HubSpot x5", "LinkedIn Insight", "TikTok pixel", "Reddit pixel", "X ads pixel", "Osano CMP"], "evidence": "VERIFIED" },
+    "warningsForPortfolio": { "value": "do not copy the consent manager, ad pixels, locale font matrix, 21-file CSS split, or the 6300px pinned video hero", "evidence": "INFERRED" }
+  },
+  "accessibilitySeo": {
+    "h1Count": { "value": 1, "evidence": "VERIFIED" },
+    "landmarks": { "value": ["header", "nav[Main navigation]", "nav[Dropdown navigation] x3", "main", "footer"], "evidence": "VERIFIED" },
+    "focusables": { "value": 179, "evidence": "VERIFIED" },
+    "srOnlyFooterHeading": { "value": "present", "evidence": "VERIFIED" },
+    "headingAnchors": { "value": "each section h2 has a #slug anchor link with aria-label 'Direct link to ...'", "evidence": "VERIFIED" },
+    "altPattern": { "value": "alt='' on decorative images; aria-hidden=true on icons", "evidence": "VERIFIED" },
+    "jsonLdBlocks": { "value": 2, "evidence": "VERIFIED count", "note": "contents not decoded" },
+    "meta": { "value": { "theme-color": "#ffffff", "canonical": "https://metamask.io", "og": true, "twitter": "summary_large_image", "viewport": "width=device-width, initial-scale=1", "lang": "en" }, "evidence": "VERIFIED" }
+  }
+}

@@ -9,7 +9,14 @@ import { getViewPointer } from "../pointer";
 import { useSiteStore } from "../../lib/store";
 import type { ReactNode } from "react";
 
-export type MiniPid = "certchain" | "legal-ai" | "cloud-nova";
+export type MiniPid =
+  | "ai-college"
+  | "ebook-studio"
+  | "code-judge"
+  | "automl-pipeline"
+  | "certchain"
+  | "legal-ai"
+  | "cloud-nova";
 
 const ORANGE = "#FF6A13";
 
@@ -49,6 +56,194 @@ function FloatTilt({ pid, children }: { pid: MiniPid; children: ReactNode }) {
     >
       {children}
     </group>
+  );
+}
+
+function AiCollege() {
+  const hub = useRef<THREE.Group>(null);
+  const orbit = useRef<THREE.Group>(null);
+  const t = useRef(0);
+  const reduced = useSiteStore((s) => s.reducedMotion);
+
+  const agentPositions = useMemo(() => {
+    return Array.from({ length: 8 }).map((_, i) => {
+      const angle = (i / 8) * Math.PI * 2;
+      return [
+        Math.cos(angle) * 1.5,
+        Math.sin(angle) * 0.85,
+        Math.sin(angle * 2) * 0.25,
+      ] as [number, number, number];
+    });
+  }, []);
+
+  useFrame((_, dt) => {
+    if (reduced) return;
+    t.current += dt;
+    if (orbit.current) orbit.current.rotation.y += dt * 0.55;
+    if (hub.current) hub.current.rotation.z += dt * 0.35;
+  });
+
+  return (
+    <FloatTilt pid="ai-college">
+      {/* Central coordinator hub */}
+      <group ref={hub}>
+        <mesh>
+          <octahedronGeometry args={[0.55, 0]} />
+          <meshPhysicalMaterial
+            color={ORANGE}
+            emissive={ORANGE}
+            emissiveIntensity={0.4}
+            roughness={0.25}
+            clearcoat={0.8}
+          />
+        </mesh>
+        <mesh>
+          <torusGeometry args={[0.85, 0.03, 16, 48]} />
+          <meshStandardMaterial color="#C9B8FF" roughness={0.3} />
+        </mesh>
+      </group>
+
+      {/* 8 specialized AI agents */}
+      <group ref={orbit}>
+        {agentPositions.map((pos, i) => (
+          <group key={i} position={pos}>
+            <mesh>
+              <sphereGeometry args={[0.18, 20, 20]} />
+              <meshPhysicalMaterial
+                color={i % 2 === 0 ? "#A5CFFF" : "#C9B8FF"}
+                roughness={0.3}
+                clearcoat={0.7}
+              />
+            </mesh>
+          </group>
+        ))}
+      </group>
+    </FloatTilt>
+  );
+}
+
+function EbookStudio() {
+  const book = useRef<THREE.Group>(null);
+  const spark = useRef<THREE.Group>(null);
+  const t = useRef(0);
+  const reduced = useSiteStore((s) => s.reducedMotion);
+
+  useFrame((_, dt) => {
+    if (reduced) return;
+    t.current += dt;
+    if (book.current) book.current.rotation.y = Math.sin(t.current * 0.8) * 0.15;
+    if (spark.current) {
+      spark.current.position.y = 0.9 + Math.sin(t.current * 2) * 0.12;
+      spark.current.rotation.z += dt * 1.2;
+    }
+  });
+
+  return (
+    <FloatTilt pid="ebook-studio">
+      <group ref={book} rotation={[0.2, 0, 0]}>
+        {/* Left page */}
+        <mesh position={[-0.7, 0, 0]} rotation={[0, 0.25, 0]}>
+          <boxGeometry args={[1.2, 1.6, 0.08]} />
+          <meshPhysicalMaterial color="#FFFFFF" roughness={0.3} clearcoat={0.5} />
+        </mesh>
+        {/* Right page */}
+        <mesh position={[0.7, 0, 0]} rotation={[0, -0.25, 0]}>
+          <boxGeometry args={[1.2, 1.6, 0.08]} />
+          <meshPhysicalMaterial color="#FFE3CF" roughness={0.3} clearcoat={0.5} />
+        </mesh>
+        {/* Spine */}
+        <mesh position={[0, 0, -0.1]}>
+          <cylinderGeometry args={[0.08, 0.08, 1.62, 16]} />
+          <meshStandardMaterial color={ORANGE} roughness={0.4} />
+        </mesh>
+      </group>
+      {/* AI Sparkle */}
+      <group ref={spark} position={[0.8, 0.9, 0.4]}>
+        <mesh>
+          <octahedronGeometry args={[0.28, 0]} />
+          <meshStandardMaterial color={ORANGE} emissive={ORANGE} emissiveIntensity={0.6} />
+        </mesh>
+      </group>
+    </FloatTilt>
+  );
+}
+
+function CodeJudge() {
+  const screen = useRef<THREE.Group>(null);
+  const orb = useRef<THREE.Group>(null);
+  const t = useRef(0);
+  const reduced = useSiteStore((s) => s.reducedMotion);
+
+  useFrame((_, dt) => {
+    if (reduced) return;
+    t.current += dt;
+    if (screen.current) screen.current.rotation.y = Math.sin(t.current * 0.7) * 0.12;
+    if (orb.current) orb.current.position.y = 0.8 + Math.sin(t.current * 1.8) * 0.1;
+  });
+
+  return (
+    <FloatTilt pid="code-judge">
+      {/* Terminal bezel */}
+      <group ref={screen}>
+        <mesh>
+          <roundedBoxGeometry args={[2.0, 1.4, 0.12, 3, 0.06]} />
+          <meshPhysicalMaterial color="#16161A" roughness={0.2} clearcoat={0.7} />
+        </mesh>
+        {/* Code lines mock */}
+        {[-0.3, -0.05, 0.2].map((y, i) => (
+          <mesh key={i} position={[-0.3 + i * 0.1, y, 0.08]}>
+            <boxGeometry args={[0.8 + i * 0.2, 0.06, 0.02]} />
+            <meshStandardMaterial color={i === 2 ? "#27C93F" : "#A5CFFF"} />
+          </mesh>
+        ))}
+      </group>
+      {/* Status Accepted Orb */}
+      <group ref={orb} position={[1.1, 0.8, 0.3]}>
+        <mesh>
+          <sphereGeometry args={[0.22, 24, 24]} />
+          <meshStandardMaterial color="#27C93F" emissive="#27C93F" emissiveIntensity={0.5} />
+        </mesh>
+        <mesh>
+          <torusGeometry args={[0.32, 0.025, 12, 32]} />
+          <meshStandardMaterial color="#A5CFFF" />
+        </mesh>
+      </group>
+    </FloatTilt>
+  );
+}
+
+function AutoMlPipeline() {
+  const stages = useRef<THREE.Group>(null);
+  const t = useRef(0);
+  const reduced = useSiteStore((s) => s.reducedMotion);
+
+  useFrame((_, dt) => {
+    if (reduced) return;
+    t.current += dt;
+    if (stages.current) {
+      stages.current.children.forEach((c, idx) => {
+        c.position.y = (idx * 0.25 - 0.35) + Math.sin(t.current * 2 + idx * 0.8) * 0.06;
+      });
+    }
+  });
+
+  return (
+    <FloatTilt pid="automl-pipeline">
+      <group ref={stages}>
+        {[-1.2, -0.4, 0.4, 1.2].map((x, i) => (
+          <group key={i} position={[x, i * 0.25 - 0.35, 0]}>
+            <mesh>
+              <cylinderGeometry args={[0.3 - i * 0.03, 0.3 - i * 0.03, 0.5 + i * 0.25, 24]} />
+              <meshPhysicalMaterial
+                color={i === 3 ? ORANGE : i % 2 === 0 ? "#A5CFFF" : "#C9B8FF"}
+                roughness={0.3}
+                clearcoat={0.6}
+              />
+            </mesh>
+          </group>
+        ))}
+      </group>
+    </FloatTilt>
   );
 }
 
@@ -209,6 +404,10 @@ function CloudNova() {
 }
 
 export default function ProjectMini({ pid }: { pid: MiniPid }) {
+  if (pid === "ai-college") return <AiCollege />;
+  if (pid === "ebook-studio") return <EbookStudio />;
+  if (pid === "code-judge") return <CodeJudge />;
+  if (pid === "automl-pipeline") return <AutoMlPipeline />;
   if (pid === "certchain") return <CertChain />;
   if (pid === "legal-ai") return <LegalAi />;
   return <CloudNova />;

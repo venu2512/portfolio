@@ -9,6 +9,7 @@ import Hero from "../components/Hero";
 import TechMarquee from "../components/TechMarquee";
 import StatsStrip from "../components/StatsStrip";
 import About from "../components/About";
+import Roles from "../components/Roles";
 import Experience from "../components/Experience";
 import Skills from "../components/Skills";
 import Projects from "../components/Projects";
@@ -41,6 +42,7 @@ export default function Page() {
           <TechMarquee />
           <StatsStrip />
           <About />
+          <Roles />
           <Experience />
           <Skills />
           <Projects />

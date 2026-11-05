@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradEbook" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#180e29" />
+      <stop offset="50%" stop-color="#241442" />
+      <stop offset="100%" stop-color="#3b134a" />
+    </linearGradient>
+    <linearGradient id="bookGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+    <linearGradient id="bookGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7ed" />
+      <stop offset="100%" stop-color="#ffedd5" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6851b" />
+      <stop offset="100%" stop-color="#e11d48" />
+    </linearGradient>
+    <filter id="glowEbook" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="560" fill="url(#bgGradEbook)" />
+
+  <!-- Ambient light circles -->
+  <circle cx="360" cy="260" r="180" fill="#a855f7" opacity="0.15" filter="url(#glowEbook)" />
+  <circle cx="560" cy="180" r="100" fill="#f6851b" opacity="0.12" filter="url(#glowEbook)" />
+
+  <!-- Header Badge -->
+  <rect x="40" y="36" width="230" height="34" rx="17" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.12" />
+  <circle cx="58" cy="53" r="5" fill="#f6851b" filter="url(#glowEbook)" />
+  <text x="74" y="58" fill="#fce7f3" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" letter-spacing="0.5">AI STORY &amp; EBOOK STUDIO</text>
+
+  <!-- Export Badges Top-Right -->
+  <g transform="translate(420, 36)">
+    <rect x="0" y="0" width="80" height="34" rx="17" fill="#f6851b" fill-opacity="0.2" stroke="#f6851b" stroke-opacity="0.4" />
+    <text x="40" y="22" fill="#fed7aa" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">EPUB 3</text>
+    <rect x="90" y="0" width="80" height="34" rx="17" fill="#ec4899" fill-opacity="0.2" stroke="#ec4899" stroke-opacity="0.4" />
+    <text x="130" y="22" fill="#fbcfe8" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">PDF</text>
+    <rect x="180" y="0" width="80" height="34" rx="17" fill="#8b5cf6" fill-opacity="0.2" stroke="#8b5cf6" stroke-opacity="0.4" />
+    <text x="220" y="22" fill="#ddd6fe" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">KINDLE</text>
+  </g>
+
+  <!-- Central Open Book Graphic -->
+  <g transform="translate(360, 260)">
+    <!-- Book Shadow -->
+    <ellipse cx="0" cy="120" rx="220" ry="24" fill="#000000" opacity="0.5" filter="url(#glowEbook)" />
+
+    <!-- Left Page -->
+    <path d="M -10 -80 C -80 -90 -160 -80 -220 -70 L -220 90 C -160 80 -80 75 -10 90 Z" fill="url(#bookGradLeft)" stroke="#cbd5e1" stroke-width="2" />
+    <!-- Left Page Content Mock -->
+    <rect x="-200" y="-50" width="80" height="12" rx="4" fill="#64748b" opacity="0.6" />
+    <rect x="-200" y="-25" width="160" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <rect x="-200" y="-10" width="170" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <rect x="-200" y="5" width="150" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <rect x="-200" y="20" width="165" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <rect x="-200" y="35" width="130" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <!-- Illustration Box Left -->
+    <rect x="-200" y="52" width="60" height="26" rx="4" fill="#e2e8f0" stroke="#cbd5e1" />
+    <circle cx="-185" cy="65" r="5" fill="#f6851b" opacity="0.6" />
+
+    <!-- Right Page -->
+    <path d="M 10 -80 C 80 -90 160 -80 220 -70 L 220 90 C 160 80 80 75 10 90 Z" fill="url(#bookGradRight)" stroke="#fed7aa" stroke-width="2" />
+    <!-- Right Page Content Mock -->
+    <rect x="30" y="-50" width="120" height="12" rx="4" fill="#ea580c" opacity="0.7" />
+    <rect x="30" y="-25" width="170" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <rect x="30" y="-10" width="160" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <rect x="30" y="5" width="170" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <rect x="30" y="20" width="140" height="8" rx="3" fill="#94a3b8" opacity="0.4" />
+    <!-- Code / Prompt Pill on Right -->
+    <rect x="30" y="42" width="165" height="34" rx="8" fill="#f6851b" fill-opacity="0.15" stroke="#f6851b" stroke-opacity="0.4" />
+    <text x="42" y="63" fill="#c2410c" font-family="monospace" font-size="10" font-weight="bold">Chapter 4: Neural Awakening</text>
+
+    <!-- Spine -->
+    <path d="M -10 -80 L 0 -85 L 10 -80 L 10 90 L 0 85 L -10 90 Z" fill="#c2410c" />
+  </g>
+
+  <!-- Floating Sparkles and Magic Stars -->
+  <g transform="translate(360, 110)">
+    <circle cx="0" cy="0" r="28" fill="url(#goldGrad)" filter="url(#glowEbook)" />
+    <polygon points="0,-18 5,-5 18,0 5,5 0,18 -5,5 -18,0 -5,-5" fill="#ffffff" />
+  </g>
+  <polygon points="200,160 203,168 211,170 203,172 200,180 197,172 189,170 197,168" fill="#fde047" opacity="0.8" />
+  <polygon points="530,190 533,196 540,198 533,200 530,206 527,200 520,198 527,196" fill="#fde047" opacity="0.8" />
+
+  <!-- Bottom Interactive Bar -->
+  <g transform="translate(40, 495)">
+    <rect width="640" height="36" rx="8" fill="#000000" fill-opacity="0.4" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="16" y="23" fill="#f6851b" font-family="monospace" font-size="12" font-weight="bold">✦ PROMPT ENGINE</text>
+    <text x="145" y="23" fill="#e2e8f0" font-family="monospace" font-size="12">Narrative Arc Engine · Automated Formatting · Character Consistency</text>
+  </g>
+</svg>
+

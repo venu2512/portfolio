@@ -2,26 +2,20 @@ export const profile = {
   name: "Venugopal V",
   shortName: "Venu",
   monogram: "VV",
-  role: "AI/ML Engineer Intern",
+  role: "Aspiring AI Engineer",
   headline: "Venugopal V",
   tagline:
-    "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications.",
-  // Owner-provided wording (§3.1). Confirm before ship.
+    "Aspiring AI Engineer building multi-agent AI systems, LLM applications, and enterprise AI platforms.",
   summary:
-    "AI & Data Science student building multi-agent AI systems, machine learning solutions, and blockchain applications. Recently completed an internship contributing to a production multi-agent digital workforce platform, with experience spanning AI agent implementation, LLM fine-tuning, and decentralized verification systems. Strong foundation in Python, data-driven problem-solving, and modern development tools. Looking for full-time roles and internships in AI, ML, Data Analytics, and Full Stack Development.",
-  // Long form: CTA banner subtext, meta description, JSON-LD description.
+    "Aspiring AI Engineer with practical experience in multi-agent AI systems, LLM applications, and enterprise AI platforms. Passionate about Agentic AI, Generative AI, and Machine Learning, with a strong interest in developing scalable AI solutions that solve real-world business challenges. Seeking opportunities to contribute to innovative AI products while continuously expanding my technical expertise.",
   openTo:
     "Full-time roles and internships in AI, ML, Data Analytics, and Full Stack Development",
-  // Short form: hero eyebrow pill, announcement bar.
   openToShort: "Open to full-time roles and internships",
-  // OWNER: confirm
   location: "Madurai, Tamil Nadu, India",
+  phone: "+91-7010422347",
+  showPhone: true,
   email: "Venu25122005@gmail.com",
-  // No `phone` field exists: while the owner's number is private, the site
-  // contains no phone JSX and no phone string anywhere (§3.3 structural guard).
-  // When the owner wants it shown, re-add `phone` AND the JSX in CtaBanner.
-  showPhone: false,
-  linkedin: "https://linkedin.com/in/venugopal-v-61a50b3a9",
+  linkedin: "https://linkedin.com/in/venugopal-v",
   github: "https://github.com/venu2512",
   resumePdf: "/Venugopal_V_Resume.pdf",
   languages: [
@@ -29,13 +23,12 @@ export const profile = {
     { name: "English", level: "Professional" },
     { name: "Telugu", level: "Conversational" },
   ],
-  // All five chips exist in the skills data below (§3.1).
-  heroChips: ["Python", "Multi-Agent Systems", "QLoRA", "React.js", "Power BI"],
+  heroChips: ["Python", "Multi-Agent Systems", "LLM Fine-Tuning (QLoRA)", "Docker", "Power BI"],
   photo: {
-    src: "/profile/profile.jpg", // required for best result
-    cutout: "/profile/profile-cutout.png", // optional transparent PNG
+    src: "/profile/profile.jpg",
+    cutout: "/profile/profile-cutout.png",
     alt: "Portrait of Venugopal V",
-    focus: { x: 0.5, y: 0.3 }, // face position, 0 = top/left, 1 = bottom/right
+    focus: { x: 0.5, y: 0.3 },
   },
 };
 
@@ -45,22 +38,20 @@ export const experience = [
     id: "kreupai",
     org: "KreupAI Technologies LLC",
     title: "AI/ML Engineer Intern",
+    location: "Dubai, UAE (Remote)",
     startDate: "May 2026",
-    // Real end date from public/Venugopal_V_Resume.pdf ("May 2026 – August 2026").
     endDate: "August 2026",
     current: false,
     bullets: [
-      "Contributed to the AISA AI Workforce Platform by developing enterprise-grade AI solutions.",
-      "Developed five AI agents: AI Contract Analyst, AI Executive Assistant, AI Procurement Officer, AI QA Coordinator, and AI Payroll Agent.",
-      "Developed AI-powered modules for the Daftar Accounting platform and built a multilingual AI Assistant for the platform.",
-      "Worked on AI agent orchestration, prompt engineering, backend integration, testing, and deployment.",
+      "Built five enterprise AI agents (Contract Analyst, Executive Assistant, Procurement Officer, QA Coordinator, Payroll Agent) for the AISA AI Workforce Platform, plus AI-powered modules and a multilingual AI Assistant for the Daftar Accounting platform.",
+      "Tech Stack: Python, LLM Prompt Engineering, Multi-Agent Orchestration, Kafka, React, REST APIs",
     ],
     tools: [
-      "AI Contract Analyst",
-      "AI Executive Assistant",
-      "AI Procurement Officer",
-      "AI QA Coordinator",
-      "AI Payroll Agent",
+      "Contract Analyst",
+      "Executive Assistant",
+      "Procurement Officer",
+      "QA Coordinator",
+      "Payroll Agent",
       "Daftar Accounting AI Assistant",
     ],
   },
@@ -68,30 +59,31 @@ export const experience = [
     id: "quadedutor",
     org: "QuadEdutor Pvt. Ltd.",
     title: "Data Science Intern",
+    location: null as string | null,
     startDate: null as string | null,
     endDate: null as string | null,
     current: false,
     bullets: [
-      "Cleaned and preprocessed real-world datasets, resolving quality issues ahead of downstream analysis.",
-      "Ran exploratory data analysis and built visualizations to surface key trends for stakeholders.",
-      "Built machine learning models that translated raw data into actionable insights.",
+      "Cleaned real-world datasets and ran EDA/visualizations; built ML models translating data into actionable insights.",
+      "Tech Stack: Python, Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn",
     ],
   },
   {
     id: "nitroware",
     org: "Nitroware Technologies",
     title: "AI & ML Intern",
+    location: null as string | null,
     startDate: null as string | null,
     endDate: null as string | null,
     current: false,
     bullets: [
-      "Designed and trained ML models for real-world applications, iterating on architecture based on performance results.",
-      "Improved model performance through systematic tuning and optimization.",
+      "Designed and tuned ML models for real-world applications, improving performance through iteration.",
+      "Tech Stack: Python, Scikit-learn, TensorFlow, Pandas, NumPy",
     ],
   },
 ];
 
-/** "May 2026 – Completed" when endDate is null; never "Present". */
+/** "May 2026 – August 2026" or "May 2026 – Completed" when endDate is null; never "Present". */
 export function experiencePeriod(job: (typeof experience)[number]): string {
   if (job.startDate && job.endDate) return `${job.startDate} – ${job.endDate}`;
   if (job.startDate) return `${job.startDate} – Completed`;
@@ -100,38 +92,75 @@ export function experiencePeriod(job: (typeof experience)[number]): string {
 
 export const projects = [
   {
+    id: "ai-college",
+    name: "AI College Management System",
+    subtitle: "Autonomous multi-agent university operating system",
+    image: "/projects/ai-college.svg",
+    stack: ["LangGraph", "FastAPI", "PostgreSQL (pgvector)", "RAG", "XGBoost", "React", "Docker"],
+    repoUrl: "https://github.com/venu2512/AI-COLLEGE-MANAGEMENT",
+    bullets: [
+      "Designed and built an autonomous multi-agent university operating system with eight specialized AI agents handling academic and administrative workflows.",
+      "Integrated RAG with PostgreSQL (pgvector) vector store, LangGraph agent workflows, and predictive analytics using XGBoost.",
+    ],
+  },
+  {
+    id: "ebook-studio",
+    name: "Ebook Studio AI",
+    subtitle: "AI-powered ebook generation & publishing platform",
+    image: "/projects/ebook-studio.svg",
+    stack: ["Next.js", "Python", "FastAPI", "LLMs", "Prompt Engineering", "Tailwind CSS"],
+    repoUrl: "https://github.com/venu2512/ebook-studio-ai",
+    bullets: [
+      "Built an end-to-end AI platform that structures, writes, formats, and illustrates complete books from conversational prompts.",
+      "Implemented automated chapter sequencing, narrative style consistency, cover generation, and one-click export to PDF and EPUB.",
+    ],
+  },
+  {
+    id: "code-judge",
+    name: "Code Breakers Judge",
+    subtitle: "Automated code execution & competitive programming judge",
+    image: "/projects/code-judge.svg",
+    stack: ["Python", "FastAPI", "Docker", "React.js", "Redis", "REST APIs"],
+    repoUrl: "https://github.com/venu2512/code-breakers-judge",
+    bullets: [
+      "Architected an automated code judging platform executing user-submitted code in isolated sandbox containers across multiple programming languages.",
+      "Engineered real-time test case evaluation, memory/time limit enforcement, and dynamic leaderboard scoring.",
+    ],
+  },
+  {
+    id: "automl-pipeline",
+    name: "AutoML & EDA Pipeline",
+    subtitle: "Automated Data Analysis & ML Pipeline with Streamlit",
+    image: "/projects/automl-pipeline.svg",
+    stack: ["Python", "Streamlit", "Pandas", "Scikit-learn", "Plotly", "AutoML"],
+    repoUrl: "https://github.com/venu2512/Automated-Data-Analysis-and-Machine-Learning-Pipeline-with-Streamlit",
+    bullets: [
+      "Built an end-to-end automated exploratory data analysis (EDA) and machine learning pipeline with an interactive Streamlit web interface.",
+      "Automated missing value handling, categorical feature encoding, hyperparameter tuning, model comparison, and interactive Plotly visualizations.",
+    ],
+  },
+  {
     id: "legal-ai",
     name: "Legal AI Chatbot",
     subtitle: "Domain-specific legal assistant",
-    stack: ["Gemma", "QLoRA", "LLM Fine-Tuning", "Python"],
+    image: "/projects/legal-ai.svg",
+    stack: ["Python", "Ollama", "QLoRA", "Gemma", "Prompt Engineering"],
     repoUrl: "https://github.com/venu2512/lex-chatbot",
     bullets: [
-      "Built a domain-specific legal chatbot by fine-tuning an LLM (Gemma) using QLoRA for efficient, low-resource deployment.",
-      "Implemented contextual understanding to deliver accurate, relevant responses to legal queries.",
+      "Fine-tuned an LLM (Gemma) using QLoRA to build a low-resource, domain-specific legal chatbot for answering legal queries.",
+      "Implemented contextual query understanding and efficient inference using Ollama.",
     ],
   },
   {
     id: "cloud-nova",
     name: "Cloud Nova",
     subtitle: "Full Stack Web Application",
-    stack: ["MongoDB", "Express.js", "React.js", "Node.js", "Vercel", "Render"],
+    image: "/projects/cloud-nova.svg",
+    stack: ["MERN Stack", "REST APIs", "Vercel", "Render", "CI/CD"],
     repoUrl: "https://github.com/venu2512/cloud-web",
     bullets: [
-      "Built and deployed a scalable MERN stack application with a modern UI, REST APIs, and MongoDB-backed data handling.",
+      "Built and deployed a full-stack web application with REST APIs, enabling core business workflows end-to-end.",
       "Shipped frontend to Vercel and backend to Render, establishing a production-style deployment pipeline.",
-    ],
-  },
-  {
-    id: "certchain",
-    name: "CertChain",
-    subtitle: "Blockchain Certificate Verification System",
-    stack: ["Ethereum (Sepolia)", "Smart Contracts", "Web3.js", "MetaMask", "QR Verification"],
-    repoUrl: "https://github.com/venu2512/certchain",
-    bullets: [
-      "Architected a decentralized certificate verification system on Ethereum (Sepolia), addressing fake-credential fraud in academic and professional settings.",
-      "Designed and deployed tamper-proof smart contracts to guarantee immutable certificate records.",
-      "Built QR-based verification for instant, public-facing validation of certificate authenticity.",
-      "Developed secure backend APIs for certificate issuance and authentication, with an Admin Portal for institutions and a public User Portal.",
     ],
   },
 ];
@@ -152,34 +181,47 @@ export const skills = [
       "Prompt Engineering",
     ],
   },
-  { id: "lang", label: "Languages", color: "primary", items: ["Python", "SQL", "Java"] },
+  {
+    id: "lang",
+    label: "Languages",
+    color: "primary",
+    items: ["Python", "Java"],
+  },
+  {
+    id: "db",
+    label: "Databases",
+    color: "cream",
+    items: ["MongoDB", "SQL"],
+  },
   {
     id: "web",
     label: "Web Development",
     color: "sky",
-    items: ["HTML", "CSS", "JavaScript", "MongoDB", "Angular.js", "React.js", "Node.js", "REST APIs"],
+    items: ["HTML", "CSS", "MERN Stack"],
   },
-  { id: "viz", label: "Visualization", color: "blush", items: ["Power BI", "Matplotlib", "Seaborn", "Plotly"] },
+  {
+    id: "viz",
+    label: "Visualization",
+    color: "blush",
+    items: ["Power BI", "Matplotlib", "Seaborn", "Plotly"],
+  },
   {
     id: "vcs",
     label: "Version Control",
     color: "ink",
-    items: [
-      "Git (branching, merging, pull requests, rebasing, conflict resolution)",
-      "GitHub",
-    ],
+    items: ["Git", "GitHub"],
   },
   {
     id: "tools",
     label: "Tools & Platforms",
     color: "white",
-    items: ["VS Code", "Streamlit", "MetaMask", "Apache Kafka"],
+    items: ["VS Code", "Streamlit", "Docker"],
   },
   {
     id: "chain",
     label: "Blockchain",
     color: "cream",
-    items: ["Ethereum", "Smart Contracts", "Web3.js"],
+    items: ["Ethereum", "Smart Contracts"],
   },
 ];
 
@@ -204,23 +246,27 @@ export const education = [
   },
 ];
 
-// FAQ (§3.2): answers use only resume facts or owner statements.
+// FAQ: answers use only resume facts or verified project details.
 export const faq = [
   {
     q: "What kind of roles are you looking for?",
-    a: "I am looking for a job in the roles of AI Engineer, ML Engineer, Data Analyst, and Full Stack Developer.",
+    a: "I am looking for full-time roles and internships as an AI Engineer, ML Engineer, Data Analyst, and Full Stack Developer.",
   },
   {
     q: "What are you working on right now?",
-    a: "I recently completed my internship at KreupAI Technologies LLC, where I worked as an AI/ML Engineer Intern on the AISA multi-agent digital workforce platform. I'm not working anywhere right now, and I'm looking for my next opportunity.",
+    a: "I recently completed my internship at KreupAI Technologies LLC, where I built enterprise AI agents and platform features on the AISA multi-agent digital workforce platform. I also designed and built the AI College Multiagent System, an autonomous university operating system with eight specialized AI agents.",
   },
   {
     q: "What is your technical stack?",
-    a: "I work mainly in Python, SQL, and Java. For AI and machine learning, I use Pandas, NumPy, Scikit-learn, TensorFlow, and OpenCV, along with LLM fine-tuning (QLoRA), multi-agent systems, and prompt engineering. On the web side, I build with HTML, CSS, REST APIs, and the MERN stack (MongoDB, Express.js, React.js, Node.js). I visualize data with Power BI, Matplotlib, Seaborn, and Plotly, and I work with Git, GitHub, VS Code, Streamlit, and Apache Kafka.",
+    a: "For AI and ML, I work with Python, Pandas, NumPy, Scikit-learn, TensorFlow, OpenCV, LangGraph, LLM Fine-Tuning (QLoRA, Gemma, Ollama), Multi-Agent Systems, and Prompt Engineering. For backend and web development, I build with FastAPI, MERN Stack (MongoDB, Express, React, Node.js), REST APIs, SQL, and Docker. I visualize data with Power BI, Matplotlib, Seaborn, and Plotly, and deploy via Vercel and Render.",
+  },
+  {
+    q: "Do you have experience building multi-agent systems?",
+    a: "Yes. At KreupAI Technologies, I built five enterprise AI agents (Contract Analyst, Executive Assistant, Procurement Officer, QA Coordinator, Payroll Agent) for the AISA AI Workforce Platform. In addition, I architected the AI College Multiagent System, coordinating eight specialized agents across academic and administrative workflows using LangGraph and FastAPI.",
   },
   {
     q: "Do you have experience fine-tuning LLMs?",
-    a: "Yes. My Legal AI Chatbot fine-tunes Gemma using QLoRA for efficient, low-resource deployment.",
+    a: "Yes. My Legal AI Chatbot fine-tunes Gemma using QLoRA for efficient, low-resource deployment with Ollama.",
   },
   {
     q: "Where can I see your code?",
@@ -232,16 +278,64 @@ export const faq = [
   },
   {
     q: "Can I download your resume?",
-    a: "Yes, use the Download Resume button on this page.",
+    a: "Yes, use the Download Resume button on this page to get the latest PDF.",
   },
 ];
 
-// Derived stats — computed, never hard-coded (§3.3).
-export function deriveStats(): Array<{ value: number | string; label: string }> {
+/**
+ * Four capability tiles — one per target role (AI Engineer, ML Engineer, Data Analyst, Full Stack Developer).
+ * Every line maps directly to experiences and projects from the resume.
+ */
+export const roles = [
+  {
+    id: "ai",
+    title: "AI Engineer",
+    line: "Autonomous university OS with eight agents & five enterprise workforce agents",
+    source: "projects[ai-college] + experience[kreupai]",
+    href: "#projects",
+    color: "lavender",
+    chips: ["Multi-Agent Systems", "Prompt Engineering", "LLM Fine-Tuning (QLoRA)"],
+  },
+  {
+    id: "ml",
+    title: "ML Engineer",
+    line: "LLM fine-tuning with QLoRA & model iteration across internships",
+    source: "projects[legal-ai] + experience[nitroware]",
+    href: "#projects",
+    color: "sky",
+    chips: ["TensorFlow", "Scikit-learn", "NumPy"],
+  },
+  {
+    id: "data",
+    title: "Data Analyst",
+    line: "Cleaning, EDA and visualization on real-world datasets with ML insights",
+    source: "experience[quadedutor]",
+    href: "#experience",
+    color: "blush",
+    chips: ["Pandas", "Power BI", "Plotly"],
+  },
+  {
+    id: "fullstack",
+    title: "Full Stack Developer",
+    line: "Full-stack web application with REST APIs, deployed to Vercel and Render",
+    source: "projects[cloud-nova]",
+    href: "#projects",
+    color: "cream",
+    chips: ["MERN Stack", "REST APIs", "Docker"],
+  },
+] as const;
+
+// Derived stats — computed, never hard-coded.
+export function deriveStats(): Array<{
+  value: number | string;
+  label: string;
+  caption: string;
+  href: string;
+}> {
   return [
-    { value: experience.length, label: "Internships" },
-    { value: projects.length, label: "Projects" },
-    { value: skills.length, label: "Skill areas" },
-    { value: 2027, label: "B.Tech graduation" },
+    { value: experience.length, label: "Internships", caption: "roles on the résumé", href: "#experience" },
+    { value: "10+", label: "Projects", caption: "built & deployed", href: "#projects" },
+    { value: skills.length, label: "Skill areas", caption: "categories under Skills", href: "#skills" },
+    { value: 2027, label: "B.Tech graduation", caption: education[0]?.school ?? "", href: "#education" },
   ];
 }

@@ -29,9 +29,12 @@
    accent, layered soft shadows, spring overshoot easing, small card radii. */
 :root {
   color-scheme: light;
-  --bg: #fdfdfc;
+  /* Warm paper (inspo dverso/works-studio lesson): a hair of warmth under
+     the pastel tiles makes the fox-orange + pastels read as one system
+     instead of tech-white. Ink and cards stay cool-neutral for contrast. */
+  --bg: #fcf9f4;
   --surface: #ffffff;
-  --surface-2: #f4f3f5;
+  --surface-2: #f5f0e9;
   --ink: #15151a;
   --muted: #6f6e78;
   --line: rgba(21, 21, 26, 0.09);
@@ -52,7 +55,17 @@
   --shadow-pop: 0 4px 10px -2px rgba(21, 21, 26, 0.08),
     0 18px 40px -12px rgba(21, 21, 26, 0.24);
   --radius-card: 20px;
+  --radius-tile: 28px;
   --spring: cubic-bezier(0.4, 1.35, 0.5, 0.97);
+  /* One motion dial (teardown §5.1): every animation duration is
+     calc(var(--motion) * X) so reduced-motion has a single switch. */
+  --motion: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion: 0;
+  }
 }
 
 [data-theme="dark"] {
@@ -80,7 +93,9 @@
   --shadow-pop: 0 4px 10px -2px rgba(0, 0, 0, 0.5),
     0 18px 40px -12px rgba(0, 0, 0, 0.6);
   --radius-card: 20px;
+  --radius-tile: 28px;
   --spring: cubic-bezier(0.4, 1.35, 0.5, 0.97);
+  --motion: 1;
 }
 
 html {
@@ -108,15 +123,15 @@ body {
 
 /* ---------------- Type scale ---------------- */
 .h1 {
-  font-size: clamp(3.2rem, 7.5vw, 6.5rem);
-  line-height: 1;
-  letter-spacing: -0.045em;
+  font-size: clamp(3.4rem, 8.6vw, 7.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
   font-weight: 800;
 }
 .h2 {
-  font-size: clamp(2.2rem, 4.6vw, 3.9rem);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
   font-weight: 800;
 }
 /* Italic accent word inside a heading — the metamask "money" flourish. */
@@ -124,6 +139,18 @@ body {
   font-style: italic;
   color: var(--primary);
   font-weight: 800;
+}
+/* Signature accent gesture: a small orange square riding the end of the
+   hero name (dverso studio pattern). Accent stays on CTA/active/hover and
+   this one detail — never on repeated chrome like bullets. */
+.accent-dot {
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-left: 0.18em;
+  border-radius: 3px;
+  background: var(--primary);
+  vertical-align: middle;
 }
 .mono-label {
   font-family: var(--font-mono);
@@ -145,15 +172,15 @@ body {
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
 }
-/* Deep-navy bento band surface (metamask consumer-blue-dark signature). */
+/* Surfaces on the deep-navy band (teardown §4.1 consumer-blue-dark). */
 .card-navy {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-tile);
 }
 .navy-band {
   background: var(--navy);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-tile);
 }
 
 /* ---------------- Buttons ---------------- */
@@ -219,7 +246,14 @@ body {
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
-  white-space: nowrap;
+  /* Wrap rather than nowrap: one résumé line ("Git (branching, merging, pull
+     requests, rebasing, conflict resolution)") is 508px wide, and as a nowrap
+     chip it forced the whole Skills grid track to 574px inside a 342px
+     container — a horizontal scrollbar on every phone. Wrapping only kicks in
+     when the label genuinely does not fit, so short keycaps are unchanged. */
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 /* Chips inside the deep-navy band — translucent white, light ink. */
 .chip-on-navy {
@@ -360,6 +394,39 @@ html.enhanced .line-mask.in:nth-child(3) > span { transition-delay: 120ms; }
   }
 }
 
+/* ---------------- Hero ----------------
+   Full-bleed tinted wash, taller top padding so the nav breathing room stays
+   inside the fold; the medallion sits in a hairline frame instead of floating
+   on the page, which is what makes the 3D read as a placed object. */
+/* Two classes on purpose: `.band` sets the shared rhythm and appears later in
+   this file, so a single-class `.hero-band` would lose the cascade. */
+.band.hero-band {
+  padding-block: 5.5rem 4.5rem;
+}
+@media (max-width: 767px) {
+  .band.hero-band {
+    padding-block: 6rem 4rem;
+  }
+}
+.hero-frame {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-tile);
+  padding: 0.75rem;
+}
+@media (min-width: 768px) {
+  .hero-frame {
+    padding: 1rem;
+  }
+}
+.hero-dateline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 /* ---------------- Navbar ---------------- */
 .navbar {
   position: sticky;
@@ -398,6 +465,54 @@ html.enhanced .line-mask.in:nth-child(3) > span { transition-delay: 120ms; }
 }
 .nav-link[aria-current="true"]::after {
   right: 0;
+}
+
+/* Disclosure panel for the Roles dropdown (desktop only). */
+.nav-drop {
+  position: relative;
+}
+.nav-drop-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: -0.75rem;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 1.5rem;
+  min-width: 32rem;
+  padding: 1.5rem;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow-pop);
+}
+.nav-drop-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.nav-drop-item {
+  display: block;
+  padding: 0.55rem 0.65rem;
+  margin-inline: -0.65rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.nav-drop-item:hover {
+  background: var(--surface-2);
+}
+.nav-drop-item span {
+  display: block;
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.nav-drop-divider {
+  grid-column: 1 / -1;
+  height: 1px;
+  background: var(--line);
 }
 
 /* ---------------- Accordion (FAQ) ---------------- */
@@ -573,18 +688,33 @@ dialog.project-dialog::backdrop {
   backdrop-filter: blur(4px);
 }
 
-/* ---------------- Announcement bar ---------------- */
+/* ---------------- Announcement bar --------------
+   Surface strip with a mono label, not a black band: the claim and its label
+   are the point, and it keeps the nav row reading as the top of the page. */
 .announce {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
   font-size: 0.85rem;
 }
-.announce button {
+.announce-link {
   color: inherit;
-  opacity: 0.7;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--primary) 60%, transparent);
 }
-.announce button:hover {
-  opacity: 1;
+.announce-link:hover {
+  color: var(--primary);
+}
+.announce-close {
+  color: var(--muted);
+  line-height: 1;
+  padding: 0.25rem 0.4rem;
+}
+.announce-close:hover {
+  color: var(--ink);
 }
 
 /* ---------------- Page-load intro (§6) ---------------- */
@@ -596,22 +726,185 @@ dialog.project-dialog::backdrop {
   .intro-wipe { display: none; }
 }
 
-/* ---------------- Section rhythm ---------------- */
+/* ---------------- Section bands + rhythm ----------------
+   Seam (gap between two sections) = 2 × padding-block:
+   4rem/side → 128px on desktop, 3rem/side → 96px on mobile. Both sit inside
+   the archive's 80-160px band (median 96px) with room for the alternating
+   washes to read as separate bands.
+
+   A band is FULL-BLEED (background + padding + scroll-margin) and the content
+   inside it stays in `.wrap` (padding-inline only, so it can never zero the
+   block rhythm). Colour-blocked bands are the page's navigation now, the same
+   job colour does in the reference (teardown §10.5). */
+.band,
 .section {
-  padding-block: 5.5rem;
+  position: relative;
   scroll-margin-top: 5rem;
+  padding-block: 4rem;
 }
 @media (max-width: 767px) {
+  .band,
   .section {
-    padding-block: 3.5rem;
+    padding-block: 3rem;
   }
+}
+.band-warm { background: var(--surface-2); }
+/* Labels inherit the band's ink so mono eyebrows stay legible on every ground. */
+.band-navy .mono-label,
+.band-primary .mono-label {
+  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+.band-tint { background: linear-gradient(180deg, var(--bg), var(--surface-2)); }
+.band-navy { background: var(--navy); color: var(--navy-ink); }
+.band-primary { background: var(--primary); color: var(--primary-ink); }
+
+/* Section head: meta row (eyebrow + permalink) → display headline → lead. */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  /* Keeps a long headline from colliding with the permalink once the head is
+     a flex column: the meta row owns its own line. */
+  gap: 0;
+}
+.section-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.section-meta .mono-label {
+  margin: 0;
+}
+.section-lead {
+  max-width: 44rem;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.band-navy .section-lead,
+.band-primary .section-lead {
+  color: color-mix(in srgb, currentColor 74%, transparent);
+}
+.section-anchor {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 150ms ease;
+}
+.section-anchor:hover {
+  color: var(--primary);
+}
+.band-navy .section-anchor,
+.band-primary .section-anchor {
+  color: color-mix(in srgb, currentColor 60%, transparent);
+}
+.band-navy .section-anchor:hover,
+.band-primary .section-anchor:hover {
+  color: currentColor;
+}
+
+/* ---------------- Colour-blocked tiles ----------------
+   The reference's core move: one flat colour ground per tile, one radius,
+   no decoration, typography doing the work (teardown §4.4, §10.5). Two radii
+   total: `--radius-card` 20px for cards, `--radius-tile` 28px for the big
+   blocks so a bento board reads as a different object from a card. */
+.tile {
+  position: relative;
+  /* Deliberately NO `display` here: this file is unlayered, so a display
+     declaration would beat Tailwind's layered `flex` / `md:grid` utilities on
+     the same element. Use `.tile-block` where a plain block is needed (an <a>). */
+  height: 100%;
+  padding: 2rem;
+  border-radius: var(--radius-tile);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  overflow: hidden;
+  transition: transform calc(var(--motion) * 300ms) var(--spring),
+    box-shadow calc(var(--motion) * 300ms) ease, border-color 200ms ease;
+}
+/* Grid/flex children must be allowed to shrink below their min-content, or a
+   single long word inside a tile widens the whole track. */
+.tile,
+.reveal {
+  min-width: 0;
+}
+a.tile:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-pop);
+}
+.tile-block {
+  display: block;
+}
+.tile-lavender { background: var(--lavender); border-color: transparent; }
+.tile-sky { background: var(--sky); border-color: transparent; }
+.tile-blush { background: var(--blush); border-color: transparent; }
+.tile-cream { background: var(--cream); border-color: transparent; }
+.tile-soft { background: var(--surface-2); border-color: transparent; }
+.tile-navy {
+  background: var(--navy);
+  color: var(--navy-ink);
+  border-color: transparent;
+}
+.tile-primary {
+  background: var(--primary);
+  color: var(--primary-ink);
+  border-color: transparent;
+}
+.tile-sub {
+  color: color-mix(in srgb, currentColor 68%, transparent);
+}
+.tile-index {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: color-mix(in srgb, currentColor 55%, transparent);
+}
+.tile-arrow {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--primary);
+  transition: transform calc(var(--motion) * 250ms) var(--spring);
+}
+.tile-navy .tile-arrow,
+.tile-primary .tile-arrow {
+  color: currentColor;
+}
+.tile:hover .tile-arrow {
+  transform: translateX(4px);
+}
+/* Full-bleed bands already paint a ground, so tiles on them get a hairline
+   instead of a border to avoid a muddy edge. */
+.band-warm .tile { border-color: var(--line); }
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  a.tile:hover,
+  .tile:hover .tile-arrow {
+    transform: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .tile { padding: 2.25rem; }
 }
 
 .wrap {
   width: 100%;
   max-width: 72rem;
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  /* Centered, symmetric column padding — inline only, never shorthand:
+     a shorthand here would outrank .section{ padding-block } and zero the
+     seam rhythm on the same element. 1.5rem guarantees the ≥24px mobile
+     minimum from the spacing guidance. */
+  padding-inline: 1.5rem;
 }
 @media (min-width: 768px) {
   .wrap {
@@ -641,6 +934,39 @@ dialog.project-dialog::backdrop {
 .back-top.show {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* ---------------- Proof strip (StatsStrip.tsx) ----------------
+   Colour-blocked tiles (see .tile above); the only overrides are the centred
+   layout and a tighter padding so four cards fit a phone row. */
+.stat-card {
+  display: block;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: transform calc(var(--motion) * 300ms) var(--spring),
+    box-shadow calc(var(--motion) * 300ms) ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-pop);
+}
+.stat-caption {
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.stat-note {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .stat-card,
+  .stat-card:hover {
+    transform: none;
+  }
 }
 
 /* Count-up numerals */

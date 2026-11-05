@@ -21,6 +21,7 @@ import { skillsFilterRef, onSkillsFilterChange } from "../filterMirror";
 const CAT_COLORS: Record<string, string> = {
   lang: "#FF6A13",
   ai: "#C9B8FF",
+  db: "#FFE29A",
   viz: "#FFB8CB",
   web: "#A5CFFF",
   vcs: "#3A3A42",

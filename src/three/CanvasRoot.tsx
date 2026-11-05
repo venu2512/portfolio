@@ -114,7 +114,18 @@ function SkillsView() {
   );
 }
 
-function ProjectView({ pid }: { pid: "certchain" | "legal-ai" | "cloud-nova" }) {
+function ProjectView({
+  pid,
+}: {
+  pid:
+    | "ai-college"
+    | "ebook-studio"
+    | "code-judge"
+    | "automl-pipeline"
+    | "certchain"
+    | "legal-ai"
+    | "cloud-nova";
+}) {
   const el = useSlotElement(`[data-view="project-${pid}"]`);
   if (!el) return null;
   return (
@@ -148,6 +159,10 @@ const VIEW_ORDER = [
   "experience",
   "skills",
   "cta",
+  "project-ai-college",
+  "project-ebook-studio",
+  "project-code-judge",
+  "project-automl-pipeline",
   "project-legal-ai",
   "project-cloud-nova",
   "project-certchain",
@@ -158,6 +173,10 @@ const VIEW_COMPONENTS: Record<(typeof VIEW_ORDER)[number], () => ReactElement | 
   experience: ExperienceView,
   skills: SkillsView,
   cta: CtaView,
+  "project-ai-college": () => <ProjectView pid="ai-college" />,
+  "project-ebook-studio": () => <ProjectView pid="ebook-studio" />,
+  "project-code-judge": () => <ProjectView pid="code-judge" />,
+  "project-automl-pipeline": () => <ProjectView pid="automl-pipeline" />,
   "project-legal-ai": () => <ProjectView pid="legal-ai" />,
   "project-cloud-nova": () => <ProjectView pid="cloud-nova" />,
   "project-certchain": () => <ProjectView pid="certchain" />,

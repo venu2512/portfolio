@@ -12,11 +12,11 @@ import JsonLd from "../components/JsonLd";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://venugopal.dev";
 // §10: openTo + summary, ~155 chars, no invented claims.
 const description =
-  "AI & Data Science student building multi-agent AI systems, ML solutions, and blockchain apps. Looking for full-time roles and internships in AI, ML, Data Analytics, and Full Stack.";
+  "Aspiring AI Engineer with practical experience in multi-agent AI systems, LLM applications, and enterprise AI platforms. Open to full-time roles and internships in AI, ML, Data Analytics, and Full Stack.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Venugopal V | AI/ML Engineer · Data Science · Full Stack · Multi-Agent Systems",
+  title: "Venugopal V | Aspiring AI Engineer · Multi-Agent Systems · Machine Learning · Full Stack",
   description,
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
@@ -24,13 +24,13 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: profile.name,
-    title: "Venugopal V | AI/ML Engineer · Data Science · Full Stack · Multi-Agent Systems",
+    title: "Venugopal V | Aspiring AI Engineer · Multi-Agent Systems · Machine Learning · Full Stack",
     description,
     images: [{ url: "/og.png", width: 1200, height: 630, alt: `${profile.name} — ${profile.role}` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Venugopal V | AI/ML Engineer · Data Science · Full Stack · Multi-Agent Systems",
+    title: "Venugopal V | Aspiring AI Engineer · Multi-Agent Systems · Machine Learning · Full Stack",
     description,
     images: ["/og.png"],
   },
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fdfdfc" },
+    { media: "(prefers-color-scheme: light)", color: "#fcf9f4" },
     { media: "(prefers-color-scheme: dark)", color: "#0e0e11" },
   ],
   width: "device-width",

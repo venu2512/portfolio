@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradJudge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e17" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#062822" />
+    </linearGradient>
+    <linearGradient id="passGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <filter id="glowJudge" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="560" fill="url(#bgGradJudge)" />
+
+  <!-- Background grid lines -->
+  <g stroke="#10b981" stroke-width="1" opacity="0.06">
+    <path d="M 0 80 L 720 80 M 0 160 L 720 160 M 0 240 L 720 240 M 0 320 L 720 320 M 0 400 L 720 400 M 0 480 L 720 480" />
+    <path d="M 120 0 L 120 560 M 240 0 L 240 560 M 360 0 L 360 560 M 480 0 L 480 560 M 600 0 L 600 560" />
+  </g>
+
+  <!-- Header Badge -->
+  <rect x="40" y="36" width="250" height="34" rx="17" fill="#ffffff" fill-opacity="0.08" stroke="#ffffff" stroke-opacity="0.12" />
+  <circle cx="58" cy="53" r="5" fill="#10b981" filter="url(#glowJudge)" />
+  <text x="74" y="58" fill="#e2e8f0" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" letter-spacing="0.5">ONLINE JUDGE · CODE RUNNER</text>
+
+  <!-- Badges Top-Right -->
+  <g transform="translate(450, 36)">
+    <rect x="0" y="0" width="100" height="34" rx="17" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-opacity="0.4" />
+    <text x="50" y="22" fill="#6ee7b7" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">Docker Core</text>
+    <rect x="110" y="0" width="120" height="34" rx="17" fill="#06b6d4" fill-opacity="0.2" stroke="#06b6d4" stroke-opacity="0.4" />
+    <text x="170" y="22" fill="#67e8f9" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">Redis Queue</text>
+  </g>
+
+  <!-- Central IDE Window Mock -->
+  <g transform="translate(70, 100)">
+    <!-- Window Frame -->
+    <rect width="580" height="360" rx="14" fill="#090d16" stroke="#1e293b" stroke-width="2" />
+
+    <!-- Title Bar -->
+    <rect width="580" height="42" rx="14" fill="#111827" />
+    <rect y="30" width="580" height="12" fill="#111827" />
+    <!-- Window Control Buttons -->
+    <circle cx="24" cy="21" r="6" fill="#ef4444" />
+    <circle cx="44" cy="21" r="6" fill="#f59e0b" />
+    <circle cx="64" cy="21" r="6" fill="#10b981" />
+    <!-- File Tab -->
+    <rect x="90" y="8" width="150" height="34" rx="6" fill="#090d16" />
+    <text x="110" y="30" fill="#f8fafc" font-family="monospace" font-size="12" font-weight="bold">solution.py</text>
+    <circle cx="218" cy="25" r="4" fill="#10b981" />
+
+    <!-- Code Editor Lines -->
+    <g transform="translate(24, 66)" font-family="monospace" font-size="13">
+      <text y="0" fill="#64748b">1</text>
+      <text x="30" y="0" fill="#f43f5e">def</text>
+      <text x="65" y="0" fill="#38bdf8">solve</text><text x="105" y="0" fill="#e2e8f0">(arr: List[int]) -&gt; int:</text>
+
+      <text y="24" fill="#64748b">2</text>
+      <text x="30" y="24" fill="#94a3b8">    # Dynamic programming memoization</text>
+
+      <text y="48" fill="#64748b">3</text>
+      <text x="30" y="48" fill="#e2e8f0">    dp = [0] * (len(arr) + 1)</text>
+
+      <text y="72" fill="#64748b">4</text>
+      <text x="30" y="72" fill="#c084fc">    for</text>
+      <text x="65" y="72" fill="#e2e8f0">i in range(1, len(arr) + 1):</text>
+
+      <text y="96" fill="#64748b">5</text>
+      <text x="30" y="96" fill="#e2e8f0">        dp[i] = max(dp[i-1], dp[i-2] + arr[i-1])</text>
+
+      <text y="120" fill="#64748b">6</text>
+      <text x="30" y="120" fill="#f43f5e">    return</text>
+      <text x="90" y="120" fill="#e2e8f0">dp[-1]</text>
+    </g>
+
+    <!-- Test Case Execution Results Panel -->
+    <rect x="24" y="215" width="532" height="120" rx="10" fill="#030712" stroke="#1f2937" stroke-width="1.5" />
+
+    <!-- Accepted Badge -->
+    <g transform="translate(42, 235)">
+      <rect width="130" height="34" rx="8" fill="url(#passGrad)" filter="url(#glowJudge)" />
+      <text x="20" y="22" fill="#ffffff" font-family="monospace" font-size="14" font-weight="900">✔ ACCEPTED</text>
+    </g>
+
+    <!-- Metrics -->
+    <g transform="translate(195, 245)" font-family="monospace" font-size="12">
+      <text x="0" y="0" fill="#94a3b8">Runtime: <tspan fill="#34d399" font-weight="bold">18 ms</tspan> (faster than 98.7%)</text>
+      <text x="0" y="20" fill="#94a3b8">Memory:  <tspan fill="#67e8f9" font-weight="bold">14.1 MB</tspan> (Docker isolated)</text>
+    </g>
+
+    <!-- Test Case Mini Badges -->
+    <g transform="translate(42, 288)">
+      <rect x="0" y="0" width="105" height="26" rx="6" fill="#065f46" stroke="#10b981" />
+      <text x="14" y="17" fill="#6ee7b7" font-family="monospace" font-size="11">Case 1: PASS</text>
+
+      <rect x="115" y="0" width="105" height="26" rx="6" fill="#065f46" stroke="#10b981" />
+      <text x="129" y="17" fill="#6ee7b7" font-family="monospace" font-size="11">Case 2: PASS</text>
+
+      <rect x="230" y="0" width="105" height="26" rx="6" fill="#065f46" stroke="#10b981" />
+      <text x="244" y="17" fill="#6ee7b7" font-family="monospace" font-size="11">Case 3: PASS</text>
+
+      <rect x="345" y="0" width="105" height="26" rx="6" fill="#065f46" stroke="#10b981" />
+      <text x="359" y="17" fill="#6ee7b7" font-family="monospace" font-size="11">Case 4: PASS</text>
+    </g>
+  </g>
+
+  <!-- Bottom Terminal Status Bar -->
+  <g transform="translate(40, 495)">
+    <rect width="640" height="36" rx="8" fill="#000000" fill-opacity="0.4" stroke="#ffffff" stroke-opacity="0.08" />
+    <text x="16" y="23" fill="#10b981" font-family="monospace" font-size="12" font-weight="bold">&gt; FASTAPI + DOCKER</text>
+    <text x="170" y="23" fill="#94a3b8" font-family="monospace" font-size="12">Multi-Language Sandbox · Memory/Time Guards · Live Leaderboard</text>
+  </g>
+</svg>
+

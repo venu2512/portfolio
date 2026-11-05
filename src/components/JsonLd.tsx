@@ -14,7 +14,7 @@ export default function JsonLd() {
     alumniOf: education.map((e) => e.school),
     knowsAbout: skills.flatMap((s) => s.items),
     knowsLanguage: profile.languages.map((l) => l.name),
-    // phone intentionally omitted (showPhone: false)
+    ...(profile.showPhone && profile.phone ? { telephone: profile.phone } : {}),
   };
 
   return (
