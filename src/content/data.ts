@@ -15,7 +15,7 @@ export const profile = {
   phone: "+91-7010422347",
   showPhone: true,
   email: "Venu25122005@gmail.com",
-  linkedin: "https://linkedin.com/in/venugopal-v",
+  linkedin: "https://www.linkedin.com/in/venugopal-v-61a50b3a9",
   github: "https://github.com/venu2512",
   resumePdf: "/Venugopal_V_Resume.pdf",
   languages: [
