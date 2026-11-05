@@ -81,6 +81,12 @@ export default function Photo({
         fetchPriority={priority ? "high" : undefined}
         className={`object-cover ${rounded}`}
         style={style}
+        onError={(e) => {
+          const target = e.currentTarget;
+          if (!target.src.endsWith("/profile/profile.jpg")) {
+            target.src = "/profile/profile.jpg";
+          }
+        }}
       />
     </picture>
   );
